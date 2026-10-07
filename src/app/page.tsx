@@ -5,6 +5,9 @@ import Link from "next/link";
 import { exercises } from "@/data/exercises";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
+// Ensure exercises are plain objects for Client Component serialization
+const plainExercises: typeof exercises = JSON.parse(JSON.stringify(exercises));
+
 const categories = [
   {
     id: "thoughts",
@@ -83,7 +86,7 @@ export default function Home() {
               </p>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {category.exercises.map((exerciseId) => {
-                  const exercise = exercises.find((e) => e.id === exerciseId);
+                  const exercise = plainExercises.find((e) => e.id === exerciseId);
                   if (!exercise) return null;
                   return (
                     <Link key={exercise.id} href={`/exercises/${exercise.id}`}>

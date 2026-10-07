@@ -2,6 +2,9 @@ import type { Field } from "../types/exercise";
 import { TextField } from "./TextField";
 import { RatingField } from "./RatingField";
 import { RowsField } from "./RowsField";
+import { ChoiceField } from "./ChoiceField";
+import { GroupField } from "./GroupField";
+import { ReadOnlyField } from "./ReadOnlyField";
 
 type Props = {
   field: Field;
@@ -31,6 +34,24 @@ export function FieldRenderer({ field, value, onChange }: Props) {
           onChange={onChange}
         />
       );
+    case "choice":
+      return (
+        <ChoiceField
+          field={field}
+          value={value as string}
+          onChange={onChange}
+        />
+      );
+    case "group":
+      return (
+        <GroupField
+          field={field}
+          value={value as Record<string, Record<string, unknown>> | undefined}
+          onChange={onChange}
+        />
+      );
+    case "readonly":
+      return <ReadOnlyField field={field} />;
     default:
       return assertNever(field);
   }

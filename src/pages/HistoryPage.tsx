@@ -24,6 +24,18 @@ export function HistoryPage() {
     }
   };
 
+  const handleExport = (entry: any) => {
+    const blob = new Blob([JSON.stringify(entry, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `entry-${entry.id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
     return (
       <div className="text-center py-12">
@@ -70,12 +82,20 @@ export function HistoryPage() {
                   {entry.status === "completed" ? "Completado" : "Borrador"}
                 </span>
               </div>
-              <button
-                onClick={() => handleDelete(entry.id)}
-                className="text-sm text-red-600 dark:text-red-400 hover:underline"
-              >
-                Borrar
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleExport(entry)}
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  Exportar
+                </button>
+                <button
+                  onClick={() => handleDelete(entry.id)}
+                  className="text-sm text-red-600 dark:text-red-400 hover:underline"
+                >
+                  Borrar
+                </button>
+              </div>
             </li>
           ))}
         </ul>

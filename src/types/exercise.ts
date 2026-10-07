@@ -20,7 +20,38 @@ export type RowsField = {
   columns: Field[];
 };
 
-export type Field = TextField | RatingField | RowsField;
+export type ChoiceField = {
+  type: "choice";
+  id: string;
+  label: string;
+  options: { value: string; label: string }[];
+};
+
+export type GroupField = {
+  type: "group";
+  id: string;
+  label: string;
+  groups: {
+    id: string;
+    label: string;
+    fields: Field[];
+  }[];
+};
+
+export type ReadOnlyField = {
+  type: "readonly";
+  id: string;
+  label: string;
+  content: string;
+};
+
+export type Field =
+  | TextField
+  | RatingField
+  | RowsField
+  | ChoiceField
+  | GroupField
+  | ReadOnlyField;
 
 export type Section = {
   id: string;

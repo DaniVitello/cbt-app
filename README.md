@@ -1,75 +1,67 @@
-# React + TypeScript + Vite
+# CBT App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+App web para hacer ejercicios de terapia cognitivo-conductual (CBT) desde la computadora.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Frontend**: Vite + React 19 + TypeScript + Tailwind CSS v4 + React Router + React Query
+- **Backend**: Node + TypeScript + Fastify + SQLite (better-sqlite3) + Zod
 
-## React Compiler
+## Cómo correr
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Backend
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd server
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+El servidor escucha en `http://127.0.0.1:3001`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Frontend
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
+```
+
+La app abre en `http://localhost:5173`. El proxy de Vite redirige `/api` al backend.
+
+## Estructura
 
 ```
+cbt-app/
+├── src/
+│   ├── api/           # Cliente de API
+│   ├── components/    # Componentes UI reutilizables
+│   ├── data/          # Ejercicios como datos tipados
+│   ├── hooks/         # Custom hooks
+│   ├── pages/         # Pantallas
+│   ├── types/         # Tipos TypeScript
+│   ├── App.tsx        # Router
+│   └── main.tsx       # Entry point
+├── server/
+│   ├── src/
+│   │   ├── routes/    # Endpoints
+│   │   ├── db.ts      # Conexión SQLite
+│   │   ├── schema.ts  # Validación con zod
+│   │   └── index.ts   # Entry point
+│   └── data/          # Base de datos SQLite (gitignored)
+└── README.md
+```
+
+## Motor de ejercicios
+
+Los ejercicios se definen como datos tipados en `src/data/exercises.ts`. Un componente genérico (`ExerciseForm` + `FieldRenderer`) renderiza cualquier ejercicio sin código específico por ejercicio.
+
+Para agregar un ejercicio nuevo, escribí un objeto tipado en `src/data/exercises.ts`. No hace falta tocar UI.
+
+## Tipos de campo
+
+- `text` — input de texto
+- `rating` — slider numérico
+- `rows` — tabla de filas repetibles
+- `choice` — selección única
+- `group` — bloques agrupados
+- `readonly` — contenido de solo lectura

@@ -1,16 +1,15 @@
-import { useState } from "react";
 import type { Exercise, Answers } from "../types/exercise";
 import { FieldRenderer } from "./FieldRenderer";
 
 type Props = {
   exercise: Exercise;
+  answers: Answers;
+  onChange: (answers: Answers) => void;
 };
 
-export function ExerciseForm({ exercise }: Props) {
-  const [answers, setAnswers] = useState<Answers>({});
-
+export function ExerciseForm({ exercise, answers, onChange }: Props) {
   const handleChange = (fieldId: string, value: unknown) => {
-    setAnswers((prev) => ({ ...prev, [fieldId]: value }));
+    onChange({ ...answers, [fieldId]: value });
   };
 
   return (

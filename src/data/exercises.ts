@@ -3,6 +3,9 @@ import type { Exercise } from "../types/exercise";
 export const exercises: Exercise[] = [
   {
     id: "problem-solving",
+    version: 1,
+    category: "action",
+    intents: ["action"],
     title: "Resolución de problemas: Formulario de automonitoreo",
     description:
       "Responder las siguientes preguntas le proporciona al terapeuta información necesaria sobre los enfoques y reacciones generales y específicas de resolución de problemas del cliente. Completá lo siguiente:",
@@ -59,6 +62,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "decatastrophizing",
+    version: 1,
+    category: "anxiety",
+    intents: ["now", "belief"],
     title: "Descatastrofizar",
     description:
       "Usá esta hoja de trabajo de descatastrofización para ayudarte a reestructurar cognitivamente cuando sentís que te estás abrumando con pensamientos catastróficos. 'Descatastrofizar' se trata de explorar la realidad y los hechos de una situación en lugar de dejarte llevar por pensamientos de '¿Y si...?'. Esta hoja tiene 5 cajas para completar. Empezá arriba, donde vas a encontrar un espacio para identificar claramente la catástrofe que te está molestando. Indicá exactamente qué tenés en mente, antes de calificar cuán angustiante sería el escenario hipotético en una escala del 0% (no tan malo) al 100% (absolutamente terrible).",
@@ -153,6 +159,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "rabbit-hole",
+    version: 1,
+    category: "anxiety",
+    intents: ["now"],
     title: "Cómo lidiar con la ansiedad: Revertí el agujero del conejo",
     description:
       "Si luchás contra la ansiedad, sabés que esas dos pequeñas palabras, '¿y si...?', pueden enviar tu mente por un agujero de conejo de escenarios cada vez más negativos. Una simple pregunta puede llevarte desde preguntarte cómo va a resultar algo hasta estar seguro de que se va a convertir en el peor escenario posible. Para combatir esta tendencia hacia lo negativo, intentá revertir el agujero del conejo (es decir, considerar los resultados positivos). Para cada resultado negativo, hay uno positivo que es igual de probable. Usá esta hoja de trabajo para encontrar algunos resultados positivos potenciales. Escribí un resultado negativo que te preocupe y encontrá un resultado positivo igual de plausible.",
@@ -184,6 +193,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "core-beliefs-suitcases",
+    version: 1,
+    category: "thoughts",
+    intents: ["belief"],
     title: "Creencias fundamentales: Las valijas",
     description:
       "Las creencias fundamentales se relacionan con las representaciones más arraigadas que tenemos de nosotros mismos, de los demás, del presente y del futuro. El siguiente ejemplo muestra cómo, en cualquier escenario, nuestras creencias fundamentales pueden impactar en nuestros comportamientos. Escenario: podemos imaginarnos yendo a una entrevista de trabajo y pensando si merecés o no este rol: uno que querés mucho. Este día, necesitás elegir una valija para llevar. Cada una representa una creencia fundamental. Usá las burbujas de pensamiento para identificar tres creencias fundamentales que te gustaría desafiar. En los espacios al lado de estas, intentá encontrar tres razones por las que estas creencias no son ciertas.",
@@ -286,6 +298,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "i-will-survive",
+    version: 1,
+    category: "selfcare",
+    intents: ["relax"],
     title: "Voy a sobrevivir",
     description:
       "Este ejercicio está diseñado para ayudarte a evaluar tus propias habilidades de afrontamiento, así como los sistemas de apoyo social en los que te apoyás para lidiar con los contratiempos y dificultades de la vida. La autocompasión y el amor propio han sido vinculados a nuestra capacidad de prosperar frente a circunstancias difíciles. Al lidiar con situaciones desafiantes, un enfoque autocompasivo a menudo sirve como un amortiguador protector, ayudándonos a lidiar con nuestro crítico interno, preparándonos para afrontar de manera más adaptativa y ayudándonos a superar. Al considerar los recursos internos y externos que te ayudan a lidiar con las luchas y los problemas, podés empezar a identificar tus propios amortiguadores protectores, desde tus rasgos personales hasta las personas a tu alrededor que podrían ayudarte. Esta hoja contiene tres preguntas para que reflexiones y respondas. Escribí tus respuestas en el espacio provisto, donde podrás volver a ellas más tarde o cuando estés experimentando un desafío.",
@@ -330,6 +345,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "cognitive-restructuring",
+    version: 1,
+    category: "thoughts",
+    intents: ["belief", "now"],
     title: "Reestructuración cognitiva de un evento",
     description:
       "Cuando las cosas ya pasaron, especialmente cuando el resultado no fue el que esperábamos, podemos quedarnos pensando lo peor sobre nosotros mismos o sobre lo que sucedió. La reestructuración cognitiva es un proceso que ayuda a remodelar la cognición. Después de todo, es la creencia o el pensamiento relacionado con el evento, y no el evento en sí, lo que más afecta a la persona. Realizá los siguientes pasos para reestructurar tus pensamientos sobre un evento, dándole un marco positivo o aceptando lo que pasó.",
@@ -374,6 +392,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "behavioral-experiments",
+    version: 1,
+    category: "action",
+    intents: ["action", "belief"],
     title: "Experimentos conductuales para poner a prueba creencias",
     description:
       "Un experimento conductual es una técnica de TCC que implica poner a prueba pensamientos automáticos negativos y reevaluar creencias y supuestos subyacentes. Esta técnica invita a las personas a ver los pensamientos negativos de manera objetiva en lugar de como verdades absolutas. Primero se identifica una creencia que se quiere poner a prueba. Luego se deriva una hipótesis específica de esta regla general, y se formula un experimento para poner a prueba dicha hipótesis.",
@@ -475,6 +496,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "thought-record",
+    version: 1,
+    category: "thoughts",
+    intents: ["now", "belief"],
     title: "Registro de pensamientos (Reestructuración cognitiva)",
     description:
       "Cuando adoptamos estilos de pensamiento defectuosos, puede ser útil completar un registro de pensamientos y considerar qué tipo de pensamiento se está disparando. A continuación se proporciona una lista de estilos de pensamiento defectuosos: Auto-culpa: en lugar de sentirte como la víctima, creés que sos responsable del dolor y la felicidad de todos los que te rodean. Pensamiento rígido: sabemos que tenemos la razón, pero otras personas no siempre estarán de acuerdo. Personalización: creer que todo lo que la gente dice y hace está de alguna manera relacionado con nosotros. Culpar: otras personas, organizaciones y el universo en general tienen la culpa de nuestros problemas. Generalizar lo específico: sacar una conclusión general basada en una sola ocurrencia. Lectura del pensamiento: creemos 'saber' lo que piensan los demás y por qué actúan como lo hacen, aunque no nos lo hayan dicho. Magnificación y filtrado: magnificamos las emociones negativas y filtramos todo lo que es positivo. Pensamiento polarizado: pensamos en situaciones y personas como todo o nada, ej: bueno versus malo, aprobado versus reprobado. Catastrofización: esperamos lo peor. Todo saldrá mal y tendrá el impacto más significativo. Trabajá con el cliente para completar el siguiente registro de pensamientos e identificar qué estilo de pensamiento se está aplicando.",
@@ -563,6 +587,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "downward-arrow",
+    version: 1,
+    category: "thoughts",
+    intents: ["belief"],
     title: "La técnica de la flecha hacia abajo para creencias fundamentales",
     description:
       "Las 'creencias fundamentales' son las creencias duraderas y fundamentales de una persona sobre sí misma, sobre los demás y sobre el mundo que la rodea. Las creencias fundamentales no siempre son negativas, sin embargo, las que lo son pueden ser problemáticas. Las creencias fundamentales se caracterizan por una serie de factores: a menudo se desarrollan temprano en la vida, como resultado de la experiencia infantil. Sin embargo, pueden cambiar más tarde en la vida, por ejemplo, como resultado de un trauma adulto. Pueden existir fuera de la conciencia. Pueden exhibirse a través de enunciados y supuestos absolutos como 'el mundo es un lugar malo'. Debido a que estas creencias se mantienen profundamente, en el 'núcleo' de alguien, puede no ser particularmente consciente de ellas. La técnica de la flecha hacia abajo es un método de pregunta socrática que puede ayudar a identificar creencias fundamentales problemáticas. En el paso 3, elegí una de las preguntas de abajo para hacerte a vos mismo: 1. ¿Qué significa este pensamiento negativo? 2. ¿Qué significa este pensamiento negativo sobre vos? 3. ¿Qué significa este pensamiento negativo sobre los demás? 4. ¿Qué significa este pensamiento negativo sobre el mundo? 5. Si esto es cierto, ¿por qué te molesta? 6. Si esto es cierto, ¿por qué es tan malo? 7. Si esto es cierto, ¿qué significa para tu futuro?",
@@ -619,6 +646,9 @@ export const exercises: Exercise[] = [
   },
   {
     id: "pmr",
+    version: 1,
+    category: "selfcare",
+    intents: ["relax"],
     title: "Relajación muscular progresiva: Conceptos básicos fáciles",
     description:
       "Este script describe los conceptos básicos de la Relajación Muscular Progresiva, manteniéndolo simple para audiencias más jóvenes. La Relajación Muscular Progresiva (PMR) puede ser una técnica útil para relajar la tensión física que sentimos como respuesta al estrés, y funciona apuntando secuencialmente a diferentes partes del cuerpo. Leé el script mientras trabajás en los pasos descritos juntos si querés, explicando que la PMR puede ayudarte a sentirte mejor cuando estás ansioso, tenso o enojado. Alternativamente, este puede ser un ejercicio que los niños quieran hacer por su cuenta. Al final, animá a los niños a practicar la Relajación Muscular Progresiva regularmente, para que puedan usarla cuando quieran calmarse, o incluso para dormirse.",
@@ -680,6 +710,9 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
   },
   {
     id: "challenging-catastrophic",
+    version: 1,
+    category: "anxiety",
+    intents: ["now", "belief"],
     title: "Desafiar pensamientos catastróficos",
     description:
       "Creer que siempre va a pasar lo peor y magnificar su impacto puede ser muy dañino para tu bienestar mental. Trabajá a través del evento completando este ejercicio para entender el miedo y encontrar tranquilidad sobre que el peor desenlace no es inevitable.",
@@ -773,6 +806,9 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
   },
   {
     id: "dysfunctional-thought-record",
+    version: 1,
+    category: "thoughts",
+    intents: ["now", "belief"],
     title: "Registro de pensamientos disfuncionales",
     description:
       "Esta hoja de trabajo es especialmente útil para personas que luchan contra pensamientos negativos y necesitan averiguar cuándo y por qué esos pensamientos son más propensos a aparecer. Aprender más sobre qué provoca ciertos pensamientos automáticos los hace más fáciles de abordar y revertir. Esta hoja de trabajo está dividida en 7 columnas: 1. A la izquierda, hay espacio para anotar la Fecha y la Hora en que surgió un pensamiento disfuncional. 2. La segunda columna es donde se detalla la Situación. Se instruye al usuario a describir el evento que condujo al pensamiento disfuncional en detalle. 3. La tercera columna es para el Pensamiento Automático. Aquí se registra el pensamiento automático disfuncional, junto con una calificación de creencia en el pensamiento en una escala del 0% al 100%. 4. La siguiente columna es donde se detalla la Emoción o emociones provocadas por este pensamiento, también con una calificación de intensidad en una escala del 0% al 100%. 5. La quinta columna se denomina 'Distorsión Cognitiva'. En esta columna, el usuario identificará qué distorsión(es) cognitiva(s) está experimentando con respecto a este pensamiento disfuncional específico, como el pensamiento de todo o nada, el filtrado, sacar conclusiones precipitadas, etc. 6. La penúltima columna es para que el usuario anote Pensamientos Alternativos que sean más positivos y funcionales para reemplazar el negativo. 7. Finalmente, la última columna es para que el usuario anote el Resultado de este ejercicio. ¿Pudiste enfrentar el pensamiento disfuncional? ¿Escribiste un pensamiento alternativo convincente? ¿Disminuyó tu creencia en el pensamiento y/o la intensidad de tu(s) emoción(es)?",
@@ -829,6 +865,9 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
   },
   {
     id: "disputing-irrational-beliefs",
+    version: 1,
+    category: "thoughts",
+    intents: ["belief"],
     title: "Disputar creencias irracionales",
     description:
       "Las creencias y los pensamientos tienen un impacto en cómo te sentís y cómo sentís influye en lo que elegís hacer. Si los pensamientos son irracionales, pueden desencadenar, amplificar y mantener emociones incómodas. Las creencias racionales distinguen entre 'deseos' y 'necesidades'. Están basadas en hechos, nos ayudan a protegernos de un probable daño, nos ayudan a lograr metas a corto y largo plazo, nos ayudan a evitar conflictos significativos con otras personas y nos ayudan a sentir las emociones que queremos sentir. No es el evento, sino nuestra interpretación del evento la que causa nuestra reacción emocional. El proceso de Disputar Creencias Irracionales (DIBs) consiste en desafiar una creencia haciéndote las siguientes preguntas: ¿Puedo apoyar racionalmente esta creencia? ¿Estas ideas están conectadas lógicamente? ¿Quién apoya esta idea y cuál es su autoridad? ¿Qué evidencia existe de la falsedad de esta creencia? ¿Hay excepciones? ¿Cuáles son las peores cosas que podrían pasar realmente si no consigo lo que creo que quiero? ¿Qué cosas buenas podría hacer que pasen si no consigo lo que creo que quiero?",
@@ -879,6 +918,9 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
   },
   {
     id: "wdep-questions",
+    version: 1,
+    category: "action",
+    intents: ["action"],
     title: "Preguntas WDEP",
     description:
       "El modelo WDEP es una técnica de la Terapia de la Realidad que ayuda a las personas a reflexionar sobre qué quieren, qué están haciendo, si está funcionando y cuál es su plan. WDEP significa: W - ¿Qué querés? D - ¿Qué estás haciendo? E - ¿Está funcionando? P - ¿Cuál es tu plan?",
@@ -935,6 +977,9 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
   },
   {
     id: "cataloging-inner-rules",
+    version: 1,
+    category: "thoughts",
+    intents: ["belief"],
     title: "Catálogo de reglas internas",
     description:
       "Todos tenemos reglas que guían nuestro comportamiento a diario. Puede que no las podamos articular claramente, pero están en nuestro subconsciente empujándonos hacia un comportamiento coherente con ellas. Muchas de estas reglas pueden ser buenas, pero algunas pueden no ser adaptativas ni útiles. Usá este ejercicio para identificar una regla cuestionable o dañina que tengas y desafiarla.",

@@ -9,17 +9,31 @@ export async function entryRoutes(app: FastifyInstance) {
   });
 
   app.get("/api/entries", async (request) => {
-    const { exercise_id } = request.query as { exercise_id?: string };
+    const { exercise_id, theme_id, status } = request.query as {
+      exercise_id?: string;
+      theme_id?: string;
+      status?: string;
+    };
 
-    let entries;
+    let query = "SELECT * FROM entries WHERE 1=1";
+    const params: any[] = [];
+
     if (exercise_id) {
-      entries = db
-        .prepare("SELECT * FROM entries WHERE exercise_id = ? ORDER BY created_at DESC")
-        .all(exercise_id);
-    } else {
-      entries = db.prepare("SELECT * FROM entries ORDER BY created_at DESC").all();
+      query += " AND exercise_id = ?";
+      params.push(exercise_id);
+    }
+    if (theme_id) {
+      query += " AND theme_id = ?";
+      params.push(theme_id);
+    }
+    if (status) {
+      query += " AND status = ?";
+      params.push(status);
     }
 
+    query += " ORDER BY created_at DESC";
+
+    const entries = db.prepare(query).all(...params);
     return entries.map(parseEntry);
   });
 
@@ -35,11 +49,31 @@ export async function entryRoutes(app: FastifyInstance) {
     }
 
     const id = randomUUID();
-    const { exercise_id, answers, status } = parsed.data;
+    const {
+      exercise_id,
+      answers,
+      status,
+      exercise_version,
+      theme_id,
+      source_entry_id,
+      measure_before,
+      measure_after,
+    } = parsed.data;
 
     db.prepare(
-      "INSERT INTO entries (id, exercise_id, answers, status) VALUES (?, ?, ?, ?)"
-    ).run(id, exercise_id, JSON.stringify(answers), status);
+      `INSERT INTO entries (id, exercise_id, answers, status, exercise_version, theme_id, source_entry_id, measure_before, measure_after)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      id,
+      exercise_id,
+      JSON.stringify(answers),
+      status,
+      exercise_version,
+      theme_id,
+      source_entry_id,
+      measure_before,
+      measure_after
+    );
 
     const entry = db.prepare("SELECT * FROM entries WHERE id = ?").get(id);
     return reply.status(201).send(parseEntry(entry));
@@ -78,18 +112,39 @@ export async function entryRoutes(app: FastifyInstance) {
       });
     }
 
-    const { exercise_id, answers, status } = parsed.data;
+    const {
+      exercise_id,
+      answers,
+      status,
+      exercise_version,
+      theme_id,
+      source_entry_id,
+      measure_before,
+      measure_after,
+    } = parsed.data;
 
     db.prepare(
       `UPDATE entries SET
         exercise_id = COALESCE(?, exercise_id),
         answers = COALESCE(?, answers),
         status = COALESCE(?, status),
-        updated_at = datetime('now')
+        exercise_version = COALESCE(?, exercise_version),
+        theme_id = COALESCE(?, theme_id),
+        source_entry_id = COALESCE(?, source_entry_id),
+        measure_before = COALESCE(?, measure_before),
+        measure_after = COALESCE(?, measure_after),
+        updated_at = datetime('now'),
+        completed_at = CASE WHEN ? = 'completed' THEN datetime('now') ELSE completed_at END
       WHERE id = ?`
     ).run(
       exercise_id ?? null,
       answers ? JSON.stringify(answers) : null,
+      status ?? null,
+      exercise_version ?? null,
+      theme_id ?? null,
+      source_entry_id ?? null,
+      measure_before ?? null,
+      measure_after ?? null,
       status ?? null,
       id
     );

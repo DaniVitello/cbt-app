@@ -22,7 +22,7 @@ export default function ExercisePage() {
 
   const { data: entries, isLoading } = useQuery({
     queryKey: ["entries", params.id],
-    queryFn: () => getEntries(params.id),
+    queryFn: () => getEntries({ exerciseId: params.id }),
   });
 
   useEffect(() => {

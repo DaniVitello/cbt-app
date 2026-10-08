@@ -12,7 +12,7 @@ export default function HistoryPage() {
 
   const { data: entries, isLoading } = useQuery({
     queryKey: ["entries", params.id],
-    queryFn: () => getEntries(params.id),
+    queryFn: () => getEntries({ exerciseId: params.id }),
   });
 
   const deleteMutation = useMutation({
@@ -71,7 +71,7 @@ export default function HistoryPage() {
             >
               <div>
                 <p className="text-sm text-muted-foreground">
-                  {new Date(entry.created_at).toLocaleString("es-AR")}
+                  {new Date(entry.createdAt).toLocaleString("es-AR")}
                 </p>
                 <span
                   className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${

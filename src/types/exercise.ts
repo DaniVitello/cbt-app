@@ -59,11 +59,41 @@ export type Section = {
   fields: Field[];
 };
 
+export type Intent = "now" | "belief" | "action" | "relax";
+
+export type Measure = {
+  id: string;
+  labelBefore: string;
+  labelAfter: string;
+  min: number;
+  max: number;
+};
+
+export type OutputKind = "belief" | "thought" | "situation" | "emotion" | "action";
+
+export type ExerciseOutput = {
+  fieldId: string;
+  kind: OutputKind;
+};
+
+export type ExerciseAccept = {
+  kind: OutputKind;
+  intoFieldId: string;
+};
+
 export type Exercise = {
   id: string;
+  version: number;
   title: string;
   description: string;
+  category: string;
+  intents: Intent[];
+  measure?: Measure;
   sections: Section[];
+  outputs?: ExerciseOutput[];
+  accepts?: ExerciseAccept[];
+  next?: string[];
+  help?: { purpose?: string; example?: string };
 };
 
 export type Answers = Record<string, unknown>;

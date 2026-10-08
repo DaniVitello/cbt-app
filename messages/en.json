@@ -1,0 +1,68 @@
+{
+  "common": {
+    "appName": "CBT App",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "export": "Export",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "saveAndExit": "Save and exit",
+    "step": "Step {current} of {total}",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode"
+  },
+  "home": {
+    "title": "Exercises",
+    "subtitle": "Choose an exercise to start. You can come back to your answers anytime.",
+    "whatDoYouNeed": "What do you need today?",
+    "intentNow": "Something is happening to me right now",
+    "intentBelief": "I want to work on a belief",
+    "intentAction": "I want to do something concrete",
+    "intentRelax": "I need to release tension",
+    "continueWhereLeft": "Continue where you left off",
+    "activeThemes": "Active themes",
+    "allExercises": "All exercises",
+    "noDrafts": "You have no saved drafts",
+    "noThemes": "You have no active themes"
+  },
+  "exercise": {
+    "history": "View history",
+    "backToList": "Back to list",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveError": "Error saving",
+    "purpose": "What is this step for?",
+    "example": "See example",
+    "before": "Before",
+    "after": "Now",
+    "measureLabel": "How much do you believe this thought?",
+    "measureEmotion": "How intense is the emotion?",
+    "completionTitle": "Exercise completed!",
+    "completionSummary": "Summary of your answers",
+    "measureChange": "Before {before} → Now {after}",
+    "nextSuggested": "Suggested next step",
+    "backToHome": "Back to home"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No saved entries yet.",
+    "draft": "Draft",
+    "completed": "Completed",
+    "backToExercise": "Back to exercise"
+  },
+  "categories": {
+    "thoughts": "Thoughts and beliefs",
+    "thoughtsDesc": "Identify, challenge, and restructure thoughts and beliefs",
+    "anxiety": "Anxiety and worry",
+    "anxietyDesc": "Manage anxiety, catastrophizing, and worry",
+    "action": "Action and problem-solving",
+    "actionDesc": "Problem-solving and behavior change",
+    "selfcare": "Self-care and relaxation",
+    "selfcareDesc": "Strengthen internal resources and relaxation"
+  }
+}

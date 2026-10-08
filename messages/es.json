@@ -1,0 +1,68 @@
+{
+  "common": {
+    "appName": "CBT App",
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Borrar",
+    "export": "Exportar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "saveAndExit": "Guardar y salir",
+    "step": "Paso {current} de {total}",
+    "darkMode": "Modo oscuro",
+    "lightMode": "Modo claro"
+  },
+  "home": {
+    "title": "Ejercicios",
+    "subtitle": "Elegí un ejercicio para comenzar. Podés volver a tus respuestas cuando quieras.",
+    "whatDoYouNeed": "¿Qué necesitás hoy?",
+    "intentNow": "Algo me está pasando ahora",
+    "intentBelief": "Quiero trabajar una creencia",
+    "intentAction": "Quiero hacer algo concreto",
+    "intentRelax": "Necesito soltar tensión",
+    "continueWhereLeft": "Continuar donde quedé",
+    "activeThemes": "Temas activos",
+    "allExercises": "Todos los ejercicios",
+    "noDrafts": "No tenés borradores guardados",
+    "noThemes": "No tenés temas activos"
+  },
+  "exercise": {
+    "history": "Ver historial",
+    "backToList": "Volver a la lista",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "saveError": "Error al guardar",
+    "purpose": "¿Para qué sirve este paso?",
+    "example": "Ver ejemplo",
+    "before": "Antes",
+    "after": "Ahora",
+    "measureLabel": "¿Cuánto creés en este pensamiento?",
+    "measureEmotion": "¿Qué intensidad tiene la emoción?",
+    "completionTitle": "¡Ejercicio completado!",
+    "completionSummary": "Resumen de tus respuestas",
+    "measureChange": "Antes {before} → Ahora {after}",
+    "nextSuggested": "Siguiente paso sugerido",
+    "backToHome": "Volver a la home"
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Todavía no hay entradas guardadas.",
+    "draft": "Borrador",
+    "completed": "Completado",
+    "backToExercise": "Volver al ejercicio"
+  },
+  "categories": {
+    "thoughts": "Pensamientos y creencias",
+    "thoughtsDesc": "Identificar, cuestionar y reestructurar pensamientos y creencias",
+    "anxiety": "Ansiedad y preocupación",
+    "anxietyDesc": "Manejar la ansiedad, el catastrofismo y la preocupación",
+    "action": "Acción y resolución",
+    "actionDesc": "Resolución de problemas y cambio de conducta",
+    "selfcare": "Cuidado personal y relajación",
+    "selfcareDesc": "Fortalecer recursos internos y relajación"
+  }
+}

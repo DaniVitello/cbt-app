@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import type { Exercise, Answers } from "@/types/exercise";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 type Props = {
   exercise: Exercise;
@@ -75,9 +76,11 @@ export function CompletionScreen({
             <ul className="flex flex-col gap-2">
               {exercise.next.map((nextId) => (
                 <li key={nextId}>
-                  <Button variant="link" className="p-0">
-                    {nextId}
-                  </Button>
+                  <Link href={`/exercises/${nextId}`}>
+                    <Button variant="link" className="p-0">
+                      {nextId}
+                    </Button>
+                  </Link>
                 </li>
               ))}
             </ul>

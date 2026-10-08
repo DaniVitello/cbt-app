@@ -197,6 +197,8 @@ export const exercises: Exercise[] = [
     category: "thoughts",
     intents: ["belief"],
     title: "Creencias fundamentales: Las valijas",
+    accepts: [{ kind: "belief", intoFieldId: "belief" }],
+    next: ["disputing-irrational-beliefs"],
     description:
       "Las creencias fundamentales se relacionan con las representaciones más arraigadas que tenemos de nosotros mismos, de los demás, del presente y del futuro. El siguiente ejemplo muestra cómo, en cualquier escenario, nuestras creencias fundamentales pueden impactar en nuestros comportamientos. Escenario: podemos imaginarnos yendo a una entrevista de trabajo y pensando si merecés o no este rol: uno que querés mucho. Este día, necesitás elegir una valija para llevar. Cada una representa una creencia fundamental. Usá las burbujas de pensamiento para identificar tres creencias fundamentales que te gustaría desafiar. En los espacios al lado de estas, intentá encontrar tres razones por las que estas creencias no son ciertas.",
     sections: [
@@ -591,6 +593,8 @@ export const exercises: Exercise[] = [
     category: "thoughts",
     intents: ["belief"],
     title: "La técnica de la flecha hacia abajo para creencias fundamentales",
+    outputs: [{ fieldId: "about-you-description", kind: "belief" }],
+    next: ["core-beliefs-suitcases"],
     description:
       "Las 'creencias fundamentales' son las creencias duraderas y fundamentales de una persona sobre sí misma, sobre los demás y sobre el mundo que la rodea. Las creencias fundamentales no siempre son negativas, sin embargo, las que lo son pueden ser problemáticas. Las creencias fundamentales se caracterizan por una serie de factores: a menudo se desarrollan temprano en la vida, como resultado de la experiencia infantil. Sin embargo, pueden cambiar más tarde en la vida, por ejemplo, como resultado de un trauma adulto. Pueden existir fuera de la conciencia. Pueden exhibirse a través de enunciados y supuestos absolutos como 'el mundo es un lugar malo'. Debido a que estas creencias se mantienen profundamente, en el 'núcleo' de alguien, puede no ser particularmente consciente de ellas. La técnica de la flecha hacia abajo es un método de pregunta socrática que puede ayudar a identificar creencias fundamentales problemáticas. En el paso 3, elegí una de las preguntas de abajo para hacerte a vos mismo: 1. ¿Qué significa este pensamiento negativo? 2. ¿Qué significa este pensamiento negativo sobre vos? 3. ¿Qué significa este pensamiento negativo sobre los demás? 4. ¿Qué significa este pensamiento negativo sobre el mundo? 5. Si esto es cierto, ¿por qué te molesta? 6. Si esto es cierto, ¿por qué es tan malo? 7. Si esto es cierto, ¿qué significa para tu futuro?",
     sections: [
@@ -869,6 +873,7 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     category: "thoughts",
     intents: ["belief"],
     title: "Disputar creencias irracionales",
+    accepts: [{ kind: "belief", intoFieldId: "belief-description" }],
     description:
       "Las creencias y los pensamientos tienen un impacto en cómo te sentís y cómo sentís influye en lo que elegís hacer. Si los pensamientos son irracionales, pueden desencadenar, amplificar y mantener emociones incómodas. Las creencias racionales distinguen entre 'deseos' y 'necesidades'. Están basadas en hechos, nos ayudan a protegernos de un probable daño, nos ayudan a lograr metas a corto y largo plazo, nos ayudan a evitar conflictos significativos con otras personas y nos ayudan a sentir las emociones que queremos sentir. No es el evento, sino nuestra interpretación del evento la que causa nuestra reacción emocional. El proceso de Disputar Creencias Irracionales (DIBs) consiste en desafiar una creencia haciéndote las siguientes preguntas: ¿Puedo apoyar racionalmente esta creencia? ¿Estas ideas están conectadas lógicamente? ¿Quién apoya esta idea y cuál es su autoridad? ¿Qué evidencia existe de la falsedad de esta creencia? ¿Hay excepciones? ¿Cuáles son las peores cosas que podrían pasar realmente si no consigo lo que creo que quiero? ¿Qué cosas buenas podría hacer que pasen si no consigo lo que creo que quiero?",
     sections: [

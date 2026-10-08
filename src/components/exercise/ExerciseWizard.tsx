@@ -21,6 +21,7 @@ type Props = {
 
 export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Props) {
   const t = useTranslations("exercise");
+  const tc = useTranslations("common");
   const [currentStep, setCurrentStep] = useState(0);
   const [measureBefore, setMeasureBefore] = useState<number | null>(null);
   const [measureAfter, setMeasureAfter] = useState<number | null>(null);
@@ -129,7 +130,7 @@ export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Prop
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">{currentSection.title}</h2>
           <span className="text-sm text-muted-foreground">
-            {t("step", { current: currentStep + 1, total: totalSteps })}
+            {tc("step", { current: currentStep + 1, total: totalSteps })}
           </span>
         </div>
 
@@ -186,10 +187,10 @@ export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Prop
           onClick={handleBack}
           disabled={isFirstStep}
         >
-          {t("back")}
+          {tc("back")}
         </Button>
         <Button onClick={handleNext}>
-          {isLastStep ? t("finish") : t("next")}
+          {isLastStep ? tc("finish") : tc("next")}
         </Button>
       </div>
     </div>

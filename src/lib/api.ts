@@ -93,6 +93,12 @@ export async function getThemes(): Promise<Theme[]> {
   return res.json();
 }
 
+export async function getTheme(id: string): Promise<Theme> {
+  const res = await fetch(`${API_URL}/themes/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch theme");
+  return res.json();
+}
+
 export async function createTheme(data: {
   title: string;
   description?: string;

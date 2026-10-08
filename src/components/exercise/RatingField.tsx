@@ -19,11 +19,11 @@ export function RatingField({ field, value, onChange }: Props) {
           id={field.id}
           min={field.min}
           max={field.max}
-          value={[value]}
+          value={[value ?? field.min]}
           onValueChange={([v]) => onChange(v)}
           className="flex-1"
         />
-        <span className="w-12 text-right font-mono text-sm">{value}</span>
+        <span className="w-12 text-right font-mono text-sm">{value ?? field.min}</span>
       </div>
     </div>
   );

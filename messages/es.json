@@ -14,7 +14,8 @@
     "saveAndExit": "Guardar y salir",
     "step": "Paso {current} de {total}",
     "darkMode": "Modo oscuro",
-    "lightMode": "Modo claro"
+    "lightMode": "Modo claro",
+    "systemMode": "Sistema"
   },
   "home": {
     "title": "Ejercicios",
@@ -28,7 +29,17 @@
     "activeThemes": "Temas activos",
     "allExercises": "Todos los ejercicios",
     "noDrafts": "No tenés borradores guardados",
-    "noThemes": "No tenés temas activos"
+    "noThemes": "No tenés temas activos",
+    "categories": {
+      "thoughts": "Pensamientos y creencias",
+      "thoughtsDesc": "Identificar, cuestionar y reestructurar pensamientos y creencias",
+      "anxiety": "Ansiedad y preocupación",
+      "anxietyDesc": "Manejar la ansiedad, el catastrofismo y la preocupación",
+      "action": "Acción y resolución",
+      "actionDesc": "Resolución de problemas y cambio de conducta",
+      "selfcare": "Cuidado personal y relajación",
+      "selfcareDesc": "Fortalecer recursos internos y relajación"
+    }
   },
   "exercise": {
     "history": "Ver historial",
@@ -36,7 +47,7 @@
     "saving": "Guardando...",
     "saved": "Guardado",
     "saveError": "Error al guardar",
-    "purpose": "¿Para qué sirve este paso?",
+    "purpose": "¿Para qué sirve este ejercicio?",
     "example": "Ver ejemplo",
     "before": "Antes",
     "after": "Ahora",
@@ -46,23 +57,31 @@
     "completionSummary": "Resumen de tus respuestas",
     "measureChange": "Antes {before} → Ahora {after}",
     "nextSuggested": "Siguiente paso sugerido",
-    "backToHome": "Volver a la home"
+    "backToHome": "Volver a la home",
+    "notFound": "Ejercicio no encontrado."
   },
   "history": {
     "title": "Historial",
     "empty": "Todavía no hay entradas guardadas.",
+    "emptyDescription": "Completá un ejercicio y aparecerá acá.",
     "draft": "Borrador",
     "completed": "Completado",
-    "backToExercise": "Volver al ejercicio"
+    "backToExercise": "Volver al ejercicio",
+    "loadMore": "Cargar más",
+    "deleteConfirm": "¿Estás seguro de que querés borrar esta entrada?",
+    "errorTitle": "Error al cargar",
+    "errorDescription": "No se pudieron cargar las entradas. Intentá de nuevo."
   },
-  "categories": {
-    "thoughts": "Pensamientos y creencias",
-    "thoughtsDesc": "Identificar, cuestionar y reestructurar pensamientos y creencias",
-    "anxiety": "Ansiedad y preocupación",
-    "anxietyDesc": "Manejar la ansiedad, el catastrofismo y la preocupación",
-    "action": "Acción y resolución",
-    "actionDesc": "Resolución de problemas y cambio de conducta",
-    "selfcare": "Cuidado personal y relajación",
-    "selfcareDesc": "Fortalecer recursos internos y relajación"
+  "theme": {
+    "notFound": "Tema no encontrado.",
+    "backToHome": "Volver a la home",
+    "timeline": "Línea de tiempo",
+    "noEntries": "Todavía no hay entradas en este tema.",
+    "status": {
+      "open": "Abierto",
+      "in_progress": "En progreso",
+      "done": "Completado",
+      "archived": "Archivado"
+    }
   }
 }

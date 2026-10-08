@@ -14,7 +14,8 @@
     "saveAndExit": "Save and exit",
     "step": "Step {current} of {total}",
     "darkMode": "Dark mode",
-    "lightMode": "Light mode"
+    "lightMode": "Light mode",
+    "systemMode": "System"
   },
   "home": {
     "title": "Exercises",
@@ -28,7 +29,17 @@
     "activeThemes": "Active themes",
     "allExercises": "All exercises",
     "noDrafts": "You have no saved drafts",
-    "noThemes": "You have no active themes"
+    "noThemes": "You have no active themes",
+    "categories": {
+      "thoughts": "Thoughts and beliefs",
+      "thoughtsDesc": "Identify, challenge, and restructure thoughts and beliefs",
+      "anxiety": "Anxiety and worry",
+      "anxietyDesc": "Manage anxiety, catastrophizing, and worry",
+      "action": "Action and problem-solving",
+      "actionDesc": "Problem-solving and behavior change",
+      "selfcare": "Self-care and relaxation",
+      "selfcareDesc": "Strengthen internal resources and relaxation"
+    }
   },
   "exercise": {
     "history": "View history",
@@ -36,7 +47,7 @@
     "saving": "Saving...",
     "saved": "Saved",
     "saveError": "Error saving",
-    "purpose": "What is this step for?",
+    "purpose": "What is this exercise for?",
     "example": "See example",
     "before": "Before",
     "after": "Now",
@@ -46,23 +57,31 @@
     "completionSummary": "Summary of your answers",
     "measureChange": "Before {before} → Now {after}",
     "nextSuggested": "Suggested next step",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "notFound": "Exercise not found."
   },
   "history": {
     "title": "History",
     "empty": "No saved entries yet.",
+    "emptyDescription": "Complete an exercise and it will appear here.",
     "draft": "Draft",
     "completed": "Completed",
-    "backToExercise": "Back to exercise"
+    "backToExercise": "Back to exercise",
+    "loadMore": "Load more",
+    "deleteConfirm": "Are you sure you want to delete this entry?",
+    "errorTitle": "Error loading",
+    "errorDescription": "Could not load entries. Please try again."
   },
-  "categories": {
-    "thoughts": "Thoughts and beliefs",
-    "thoughtsDesc": "Identify, challenge, and restructure thoughts and beliefs",
-    "anxiety": "Anxiety and worry",
-    "anxietyDesc": "Manage anxiety, catastrophizing, and worry",
-    "action": "Action and problem-solving",
-    "actionDesc": "Problem-solving and behavior change",
-    "selfcare": "Self-care and relaxation",
-    "selfcareDesc": "Strengthen internal resources and relaxation"
+  "theme": {
+    "notFound": "Theme not found.",
+    "backToHome": "Back to home",
+    "timeline": "Timeline",
+    "noEntries": "No entries in this theme yet.",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Completed",
+      "archived": "Archived"
+    }
   }
 }

@@ -2,8 +2,8 @@
 
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import { getTheme, getThemeEntries } from "@/lib/api";
 import { exercises } from "@/data/exercises";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function ThemePage() {
   const params = useParams<{ id: string }>();
   const t = useTranslations("exercise");
+  const tt = useTranslations("theme");
+  const locale = useLocale();
 
   const { data: theme, isLoading: themeLoading } = useQuery({
     queryKey: ["theme", params.id],
@@ -36,9 +38,9 @@ export default function ThemePage() {
   if (!theme) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <p className="text-muted-foreground">Tema no encontrado.</p>
+        <p className="text-muted-foreground">{tt("notFound")}</p>
         <Link href="/">
-          <Button variant="link">Volver a la home</Button>
+          <Button variant="link">{tt("backToHome")}</Button>
         </Link>
       </div>
     );
@@ -48,7 +50,7 @@ export default function ThemePage() {
     <div className="mx-auto max-w-2xl px-4 py-8">
       <Link href="/">
         <Button variant="link" className="mb-6 p-0">
-          ← Volver a la home
+          ← {tt("backToHome")}
         </Button>
       </Link>
 
@@ -68,16 +70,16 @@ export default function ThemePage() {
                   : "bg-yellow-100 text-yellow-800"
           }`}
         >
-          {theme.status}
+          {tt(`status.${theme.status}`)}
         </span>
       </div>
 
-      <h2 className="mb-4 text-lg font-semibold">Línea de tiempo</h2>
+      <h2 className="mb-4 text-lg font-semibold">{tt("timeline")}</h2>
 
       {entriesLoading ? (
         <Skeleton className="h-32" />
       ) : !entries || entries.length === 0 ? (
-        <p className="text-muted-foreground">Todavía no hay entradas en este tema.</p>
+        <p className="text-muted-foreground">{tt("noEntries")}</p>
       ) : (
         <div className="flex flex-col gap-3">
           {entries.map((entry) => {
@@ -91,7 +93,7 @@ export default function ThemePage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(entry.createdAt).toLocaleString("es-AR")}
+                    {new Date(entry.createdAt).toLocaleString(locale)}
                   </p>
                   {entry.measures?.before != null && entry.measures?.after != null && (
                     <p className="mt-1 text-sm">

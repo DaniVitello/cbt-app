@@ -6,6 +6,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "action",
     intents: ["action"],
+    help: {
+      purpose:
+        "Te ayuda a ordenar un problema concreto: definirlo sin vueltas, fijarte un objetivo, ver qué probaste hasta ahora y qué resultó, para después decidir un próximo paso con más claridad.",
+      example:
+        "Ej: Problema: 'No puedo concentrarme para estudiar de noche'. Objetivo: 'Estudiar 2 horas seguidas'. Intenté: dejar el celular en otra habitación (funcionó a medias). Resultado: estudié 1 hora y media y me quedé inquieto.",
+    },
     title: "Resolución de problemas: Formulario de automonitoreo",
     description:
       "Responder las siguientes preguntas le proporciona al terapeuta información necesaria sobre los enfoques y reacciones generales y específicas de resolución de problemas del cliente. Completá lo siguiente:",
@@ -65,6 +71,19 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "anxiety",
     intents: ["now", "belief"],
+    measure: {
+      id: "catastrophe-likelihood",
+      labelBefore: "Antes de empezar: ¿cuánto creés que va a ocurrir la catástrofe?",
+      labelAfter: "Ahora que terminaste: ¿cuánto creés que va a ocurrir la catástrofe?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Sirve para bajar de tono un pensamiento de '¿y si sale todo mal'. Vas a poner el miedo en palabras precisas, mirar la probabilidad real y ver que, aunque pase lo peor, podrías afrontarlo.",
+      example:
+        "Ej: En vez de '¿y si me va mal en la entrevista?', escribís la predicción concreta: 'No voy a conseguir el trabajo'. Después calificás qué tan probable es, no qué tan terrible suena.",
+    },
     title: "Descatastrofizar",
     description:
       "Usá esta hoja de trabajo de descatastrofización para ayudarte a reestructurar cognitivamente cuando sentís que te estás abrumando con pensamientos catastróficos. 'Descatastrofizar' se trata de explorar la realidad y los hechos de una situación en lugar de dejarte llevar por pensamientos de '¿Y si...?'. Esta hoja tiene 5 cajas para completar. Empezá arriba, donde vas a encontrar un espacio para identificar claramente la catástrofe que te está molestando. Indicá exactamente qué tenés en mente, antes de calificar cuán angustiante sería el escenario hipotético en una escala del 0% (no tan malo) al 100% (absolutamente terrible).",
@@ -162,6 +181,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "anxiety",
     intents: ["now"],
+    help: {
+      purpose:
+        "Corta la espiral de '¿y si...?': por cada resultado negativo que te preocupa, te obliga a buscar un resultado positivo igual de plausible.",
+      example:
+        "Ej: Negativo: 'Si llego tarde, me van a echar'. Positivo: 'Si llego tarde, aviso por mensaje y llega todo bien'.",
+    },
     title: "Cómo lidiar con la ansiedad: Revertí el agujero del conejo",
     description:
       "Si luchás contra la ansiedad, sabés que esas dos pequeñas palabras, '¿y si...?', pueden enviar tu mente por un agujero de conejo de escenarios cada vez más negativos. Una simple pregunta puede llevarte desde preguntarte cómo va a resultar algo hasta estar seguro de que se va a convertir en el peor escenario posible. Para combatir esta tendencia hacia lo negativo, intentá revertir el agujero del conejo (es decir, considerar los resultados positivos). Para cada resultado negativo, hay uno positivo que es igual de probable. Usá esta hoja de trabajo para encontrar algunos resultados positivos potenciales. Escribí un resultado negativo que te preocupe y encontrá un resultado positivo igual de plausible.",
@@ -196,6 +221,19 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "thoughts",
     intents: ["belief"],
+    measure: {
+      id: "core-belief-strength",
+      labelBefore: "Antes: ¿cuánto creés en la creencia que querés desafiar?",
+      labelAfter: "Ahora: ¿cuánto creés en esa creencia?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Te ayuda a identificar creencias profundas sobre vos (las tres 'valijas' que elegirías para una entrevista) y a buscar razones concretas por las que cada una podría no ser cierta.",
+      example:
+        "Ej: Creencia: 'No soy talentoso'. Razones: 'Me pidieron que entrenara a alguien nuevo', 'Terminé ese proyecto difícil', 'Mi jefe me felicitó en marzo'.",
+    },
     title: "Creencias fundamentales: Las valijas",
     accepts: [{ kind: "belief", intoFieldId: "belief" }],
     next: ["disputing-irrational-beliefs"],
@@ -303,6 +341,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "selfcare",
     intents: ["relax"],
+    help: {
+      purpose:
+        "Para recordarte tus recursos: algo difícil ya pasó, y acá revisás qué hiciste, qué te ayudó y quién estuvo. Sirve de respaldo cuando aparece un desafío nuevo.",
+      example:
+        "Ej: 'Cuando me mudé solo sin plata, me ayudó hacer un presupuesto, mi hermana me prestó dinero y descubrí que aguanto mejor de lo que creía.'",
+    },
     title: "Voy a sobrevivir",
     description:
       "Este ejercicio está diseñado para ayudarte a evaluar tus propias habilidades de afrontamiento, así como los sistemas de apoyo social en los que te apoyás para lidiar con los contratiempos y dificultades de la vida. La autocompasión y el amor propio han sido vinculados a nuestra capacidad de prosperar frente a circunstancias difíciles. Al lidiar con situaciones desafiantes, un enfoque autocompasivo a menudo sirve como un amortiguador protector, ayudándonos a lidiar con nuestro crítico interno, preparándonos para afrontar de manera más adaptativa y ayudándonos a superar. Al considerar los recursos internos y externos que te ayudan a lidiar con las luchas y los problemas, podés empezar a identificar tus propios amortiguadores protectores, desde tus rasgos personales hasta las personas a tu alrededor que podrían ayudarte. Esta hoja contiene tres preguntas para que reflexiones y respondas. Escribí tus respuestas en el espacio provisto, donde podrás volver a ellas más tarde o cuando estés experimentando un desafío.",
@@ -350,6 +394,19 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "thoughts",
     intents: ["belief", "now"],
+    measure: {
+      id: "thought-strength",
+      labelBefore: "Antes: ¿cuánto creés en el pensamiento más duro sobre el evento?",
+      labelAfter: "Ahora: ¿cuánto creés en ese pensamiento?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Te lleva a mirar un evento que ya pasó y a reemplazar el pensamiento más duro por una mirada más equilibrada o por aceptar lo que fue.",
+      example:
+        "Ej: Evento: 'Me interrumpí en la reunión'. Pensamiento: 'Quedé como un ignorante'. Reestructuración: 'Me emocioné por el tema y participé; eso también se valora'.",
+    },
     title: "Reestructuración cognitiva de un evento",
     description:
       "Cuando las cosas ya pasaron, especialmente cuando el resultado no fue el que esperábamos, podemos quedarnos pensando lo peor sobre nosotros mismos o sobre lo que sucedió. La reestructuración cognitiva es un proceso que ayuda a remodelar la cognición. Después de todo, es la creencia o el pensamiento relacionado con el evento, y no el evento en sí, lo que más afecta a la persona. Realizá los siguientes pasos para reestructurar tus pensamientos sobre un evento, dándole un marco positivo o aceptando lo que pasó.",
@@ -397,6 +454,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "action",
     intents: ["action", "belief"],
+    help: {
+      purpose:
+        "Convierte una creencia en algo que se puede probar en la vida real: la escribís, derivás una creencia alternativa, armás un experimento, lo hacés y comparás qué pasó contra lo que esperabas.",
+      example:
+        "Ej: Creencia: 'Si pido ayuda, me van a tomar por menos capaz'. Experimento: pedirle a un compañero que revise mi informe. Resultado: lo revisó y me dijo que el análisis estaba bueno.",
+    },
     title: "Experimentos conductuales para poner a prueba creencias",
     description:
       "Un experimento conductual es una técnica de TCC que implica poner a prueba pensamientos automáticos negativos y reevaluar creencias y supuestos subyacentes. Esta técnica invita a las personas a ver los pensamientos negativos de manera objetiva en lugar de como verdades absolutas. Primero se identifica una creencia que se quiere poner a prueba. Luego se deriva una hipótesis específica de esta regla general, y se formula un experimento para poner a prueba dicha hipótesis.",
@@ -501,6 +564,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "thoughts",
     intents: ["now", "belief"],
+    help: {
+      purpose:
+        "Para frenar y entender qué pasó: el disparador, tus pensamientos automáticos, la intensidad emocional y qué estilo de pensamiento se activó (todo o nada, personalización...), y probar una alternativa.",
+      example:
+        "Ej: Disparador: 'Mi amigo no me contestó el mensaje'. Pensamiento: 'No le importo'. Alternativa: 'Está trabajando; seguramente contesta después'.",
+    },
     title: "Registro de pensamientos (Reestructuración cognitiva)",
     description:
       "Cuando adoptamos estilos de pensamiento defectuosos, puede ser útil completar un registro de pensamientos y considerar qué tipo de pensamiento se está disparando. A continuación se proporciona una lista de estilos de pensamiento defectuosos: Auto-culpa: en lugar de sentirte como la víctima, creés que sos responsable del dolor y la felicidad de todos los que te rodean. Pensamiento rígido: sabemos que tenemos la razón, pero otras personas no siempre estarán de acuerdo. Personalización: creer que todo lo que la gente dice y hace está de alguna manera relacionado con nosotros. Culpar: otras personas, organizaciones y el universo en general tienen la culpa de nuestros problemas. Generalizar lo específico: sacar una conclusión general basada en una sola ocurrencia. Lectura del pensamiento: creemos 'saber' lo que piensan los demás y por qué actúan como lo hacen, aunque no nos lo hayan dicho. Magnificación y filtrado: magnificamos las emociones negativas y filtramos todo lo que es positivo. Pensamiento polarizado: pensamos en situaciones y personas como todo o nada, ej: bueno versus malo, aprobado versus reprobado. Catastrofización: esperamos lo peor. Todo saldrá mal y tendrá el impacto más significativo. Trabajá con el cliente para completar el siguiente registro de pensamientos e identificar qué estilo de pensamiento se está aplicando.",
@@ -592,6 +661,19 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "thoughts",
     intents: ["belief"],
+    measure: {
+      id: "thought-belief",
+      labelBefore: "Antes: ¿cuánto creés en este pensamiento?",
+      labelAfter: "Ahora: ¿cuánto creés en este pensamiento?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Es una pregunta socrática en cadena: cada respuesta te lleva un poco más abajo, hasta llegar a la creencia fundamental que sostiene el pensamiento.",
+      example:
+        "Ej: 'Reprobé el examen' → '¿Qué significa esto sobre vos?' → 'Que no sirvo para esto' → '¿Y qué significa eso?' → 'Que nunca voy a lograr nada'.",
+    },
     title: "La técnica de la flecha hacia abajo para creencias fundamentales",
     outputs: [{ fieldId: "about-you-description", kind: "belief" }],
     next: ["core-beliefs-suitcases"],
@@ -653,6 +735,12 @@ export const exercises: Exercise[] = [
     version: 1,
     category: "selfcare",
     intents: ["relax"],
+    help: {
+      purpose:
+        "Un script para soltar tensión muscular paso a paso. Se usa cuando estás ansioso, tenso o enojado; con práctica cada vez resulta más fácil entrar en ese estado de calma.",
+      example:
+        "Ej: Sentado y con los ojos cerrados, respirás tres veces profundas y vas recorriendo el cuerpo de los pies a la cabeza, apretando y soltando cada zona.",
+    },
     title: "Relajación muscular progresiva: Conceptos básicos fáciles",
     description:
       "Este script describe los conceptos básicos de la Relajación Muscular Progresiva, manteniéndolo simple para audiencias más jóvenes. La Relajación Muscular Progresiva (PMR) puede ser una técnica útil para relajar la tensión física que sentimos como respuesta al estrés, y funciona apuntando secuencialmente a diferentes partes del cuerpo. Leé el script mientras trabajás en los pasos descritos juntos si querés, explicando que la PMR puede ayudarte a sentirte mejor cuando estás ansioso, tenso o enojado. Alternativamente, este puede ser un ejercicio que los niños quieran hacer por su cuenta. Al final, animá a los niños a practicar la Relajación Muscular Progresiva regularmente, para que puedan usarla cuando quieran calmarse, o incluso para dormirse.",
@@ -717,6 +805,19 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     version: 1,
     category: "anxiety",
     intents: ["now", "belief"],
+    measure: {
+      id: "fear-likelihood",
+      labelBefore: "Antes: ¿cuánto creés que va a pasar lo que temés?",
+      labelAfter: "Ahora: ¿cuánto creés que va a pasar lo que temés?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Pone a prueba la profecía de 'siempre pasa lo peor': mirás la probabilidad real, los distintos escenarios y tu capacidad de afrontamiento, para llegar a una mirada más tranquila.",
+      example:
+        "Ej: Evento: 'Se me rompe la computadora antes de entregar'. Probabilidad: me pasó 1 vez en 5 años. Mejor escenario: la arreglo en 2 días; peor: pierdo la entrega y la recupero con una prórroga.",
+    },
     title: "Desafiar pensamientos catastróficos",
     description:
       "Creer que siempre va a pasar lo peor y magnificar su impacto puede ser muy dañino para tu bienestar mental. Trabajá a través del evento completando este ejercicio para entender el miedo y encontrar tranquilidad sobre que el peor desenlace no es inevitable.",
@@ -813,6 +914,12 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     version: 1,
     category: "thoughts",
     intents: ["now", "belief"],
+    help: {
+      purpose:
+        "Una tabla de 7 columnas para registrar pensamientos repetidos, su distorsión y una alternativa, y así descubrir cuándo y por qué aparecen más.",
+      example:
+        "Ej: 14:30, reunión con el jefe; pensamiento 'me va a criticar' (80%); emoción ansiedad (70%); distorsión: lectura de pensamiento; alternativa: 'solo quiere revisar avances'; resultado: creencia 40%.",
+    },
     title: "Registro de pensamientos disfuncionales",
     description:
       "Esta hoja de trabajo es especialmente útil para personas que luchan contra pensamientos negativos y necesitan averiguar cuándo y por qué esos pensamientos son más propensos a aparecer. Aprender más sobre qué provoca ciertos pensamientos automáticos los hace más fáciles de abordar y revertir. Esta hoja de trabajo está dividida en 7 columnas: 1. A la izquierda, hay espacio para anotar la Fecha y la Hora en que surgió un pensamiento disfuncional. 2. La segunda columna es donde se detalla la Situación. Se instruye al usuario a describir el evento que condujo al pensamiento disfuncional en detalle. 3. La tercera columna es para el Pensamiento Automático. Aquí se registra el pensamiento automático disfuncional, junto con una calificación de creencia en el pensamiento en una escala del 0% al 100%. 4. La siguiente columna es donde se detalla la Emoción o emociones provocadas por este pensamiento, también con una calificación de intensidad en una escala del 0% al 100%. 5. La quinta columna se denomina 'Distorsión Cognitiva'. En esta columna, el usuario identificará qué distorsión(es) cognitiva(s) está experimentando con respecto a este pensamiento disfuncional específico, como el pensamiento de todo o nada, el filtrado, sacar conclusiones precipitadas, etc. 6. La penúltima columna es para que el usuario anote Pensamientos Alternativos que sean más positivos y funcionales para reemplazar el negativo. 7. Finalmente, la última columna es para que el usuario anote el Resultado de este ejercicio. ¿Pudiste enfrentar el pensamiento disfuncional? ¿Escribiste un pensamiento alternativo convincente? ¿Disminuyó tu creencia en el pensamiento y/o la intensidad de tu(s) emoción(es)?",
@@ -872,6 +979,19 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     version: 1,
     category: "thoughts",
     intents: ["belief"],
+    measure: {
+      id: "belief-strength",
+      labelBefore: "Antes: ¿cuánto creés en esta creencia?",
+      labelAfter: "Ahora: ¿cuánto creés en esta creencia?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Le hace preguntas incómodas a tu creencia: evidencia a favor y en contra, lenguaje extremo, todo o nada. El objetivo es distinguir un deseo de una necesidad y quedarte con una creencia más razonable.",
+      example:
+        "Ej: Creencia: 'Tengo que ser el mejor siempre'. Evidencia en contra: no siempre fui el mejor y las cosas salieron bien de todos modos.",
+    },
     title: "Disputar creencias irracionales",
     accepts: [{ kind: "belief", intoFieldId: "belief-description" }],
     description:
@@ -926,6 +1046,12 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     version: 1,
     category: "action",
     intents: ["action"],
+    help: {
+      purpose:
+        "Ciclo corto de Terapia de la Realidad: querés, hacés, evaluás y planificás. Sirve para desatascar la acción cuando sentís que no avanzás.",
+      example:
+        "Ej: W: 'quiero dormir mejor'. D: 'me acuesto tarde con el celular'. E: 'no funciona, duermo 5 horas'. P: 'dejar el celular afuera de la habitación a las 23, por 2 semanas'.",
+    },
     title: "Preguntas WDEP",
     description:
       "El modelo WDEP es una técnica de la Terapia de la Realidad que ayuda a las personas a reflexionar sobre qué quieren, qué están haciendo, si está funcionando y cuál es su plan. WDEP significa: W - ¿Qué querés? D - ¿Qué estás haciendo? E - ¿Está funcionando? P - ¿Cuál es tu plan?",
@@ -985,6 +1111,19 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
     version: 1,
     category: "thoughts",
     intents: ["belief"],
+    measure: {
+      id: "rule-belief",
+      labelBefore: "Antes: ¿cuánto creés en esta regla?",
+      labelAfter: "Ahora: ¿cuánto creés en esta regla?",
+      min: 0,
+      max: 100,
+    },
+    help: {
+      purpose:
+        "Te muestra las reglas invisibles con las que te manejás ('debo...', 'nunca...'), de dónde salieron y si te conviene quedarte con alguna, tirarla o modificarla.",
+      example:
+        "Ej: Infracción: 'me tomé un día de descanso'. Regla: 'debo estar siempre productivo'. Decisión: modificarla → 'descanso también es parte del plan'.",
+    },
     title: "Catálogo de reglas internas",
     description:
       "Todos tenemos reglas que guían nuestro comportamiento a diario. Puede que no las podamos articular claramente, pero están en nuestro subconsciente empujándonos hacia un comportamiento coherente con ellas. Muchas de estas reglas pueden ser buenas, pero algunas pueden no ser adaptativas ni útiles. Usá este ejercicio para identificar una regla cuestionable o dañina que tengas y desafiarla.",

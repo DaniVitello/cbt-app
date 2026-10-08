@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,6 +18,7 @@ interface ContinueCardProps {
 
 export function ContinueCard({ drafts, isLoading }: ContinueCardProps) {
   const t = useTranslations("home");
+  const locale = useLocale();
 
   if (isLoading) {
     return (
@@ -48,7 +49,7 @@ export function ContinueCard({ drafts, isLoading }: ContinueCardProps) {
             </CardHeader>
             <CardContent>
               <p className="mb-2 text-sm text-muted-foreground">
-                {new Date(draft.updatedAt).toLocaleString("es-AR")}
+                {new Date(draft.updatedAt).toLocaleString(locale)}
               </p>
               <Link href={`/exercises/${draft.exerciseId}`}>
                 <Button variant="outline" size="sm">

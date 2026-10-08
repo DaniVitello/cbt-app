@@ -23,6 +23,67 @@ export interface Theme {
   updatedAt: string;
 }
 
+/* -------------------------------------------------------------------------
+ * Capa de traducción de casing: la API Fastify devuelve snake_case,
+ * el frontend usa camelCase. Todo pasa por acá (un solo punto de mapeo).
+ * ---------------------------------------------------------------------- */
+
+interface RawEntry {
+  id: string;
+  exercise_id: string;
+  exercise_version: number;
+  theme_id: string | null;
+  source_entry_id: string | null;
+  answers: Record<string, unknown>;
+  measure_before: number | null;
+  measure_after: number | null;
+  status: "draft" | "completed";
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+interface RawTheme {
+  id: string;
+  title: string;
+  description?: string | null;
+  status: Theme["status"];
+  created_at: string;
+  updated_at: string;
+}
+
+function mapEntry(raw: RawEntry): Entry {
+  return {
+    id: raw.id,
+    exerciseId: raw.exercise_id,
+    exerciseVersion: raw.exercise_version,
+    themeId: raw.theme_id,
+    sourceEntryId: raw.source_entry_id,
+    answers: raw.answers ?? {},
+    measures: {
+      before: raw.measure_before ?? undefined,
+      after: raw.measure_after ?? undefined,
+    },
+    status: raw.status,
+    createdAt: raw.created_at,
+    updatedAt: raw.updated_at,
+    completedAt: raw.completed_at ?? undefined,
+  };
+}
+
+function mapTheme(raw: RawTheme): Theme {
+  return {
+    id: raw.id,
+    title: raw.title,
+    description: raw.description ?? undefined,
+    status: raw.status,
+    createdAt: raw.created_at,
+    updatedAt: raw.updated_at,
+  };
+}
+
+/* ------------------------------- Entries --------------------------------- */
+
 export async function getEntries(filter?: {
   exerciseId?: string;
   themeId?: string;
@@ -40,48 +101,71 @@ export async function getEntries(filter?: {
   const url = `${API_URL}/entries${params.toString() ? `?${params}` : ""}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch entries");
-  return res.json();
+  const data: RawEntry[] = await res.json();
+  return data.map(mapEntry);
 }
 
 export async function createEntry(data: {
-  exercise_id: string;
+  exerciseId: string;
   answers: Record<string, unknown>;
   status: "draft" | "completed";
-  exercise_version?: number;
-  theme_id?: string | null;
-  source_entry_id?: string | null;
-  measure_before?: number | null;
-  measure_after?: number | null;
+  exerciseVersion?: number;
+  themeId?: string | null;
+  sourceEntryId?: string | null;
+  measureBefore?: number | null;
+  measureAfter?: number | null;
 }): Promise<Entry> {
+  const body = {
+    exercise_id: data.exerciseId,
+    answers: data.answers,
+    status: data.status,
+    exercise_version: data.exerciseVersion,
+    theme_id: data.themeId,
+    source_entry_id: data.sourceEntryId,
+    measure_before: data.measureBefore,
+    measure_after: data.measureAfter,
+  };
   const res = await fetch(`${API_URL}/entries`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error("Failed to create entry");
-  return res.json();
+  const raw: RawEntry = await res.json();
+  return mapEntry(raw);
 }
 
 export async function updateEntry(
   id: string,
   data: Partial<{
-    exercise_id: string;
+    exerciseId: string;
     answers: Record<string, unknown>;
     status: "draft" | "completed";
-    exercise_version: number;
-    theme_id: string | null;
-    source_entry_id: string | null;
-    measure_before: number | null;
-    measure_after: number | null;
+    exerciseVersion: number;
+    themeId: string | null;
+    sourceEntryId: string | null;
+    measureBefore: number | null;
+    measureAfter: number | null;
   }>,
 ): Promise<Entry> {
+  const body: Record<string, unknown> = {};
+  if (data.exerciseId !== undefined) body.exercise_id = data.exerciseId;
+  if (data.answers !== undefined) body.answers = data.answers;
+  if (data.status !== undefined) body.status = data.status;
+  if (data.exerciseVersion !== undefined) body.exercise_version = data.exerciseVersion;
+  if (data.themeId !== undefined) body.theme_id = data.themeId;
+  if (data.sourceEntryId !== undefined) body.source_entry_id = data.sourceEntryId;
+  if (data.measureBefore !== undefined) body.measure_before = data.measureBefore;
+  if (data.measureAfter !== undefined) body.measure_after = data.measureAfter;
+
   const res = await fetch(`${API_URL}/entries/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error("Failed to update entry");
-  return res.json();
+  const raw: RawEntry = await res.json();
+  return mapEntry(raw);
 }
 
 export async function deleteEntry(id: string): Promise<void> {
@@ -91,16 +175,20 @@ export async function deleteEntry(id: string): Promise<void> {
   if (!res.ok) throw new Error("Failed to delete entry");
 }
 
+/* ------------------------------- Themes ---------------------------------- */
+
 export async function getThemes(): Promise<Theme[]> {
   const res = await fetch(`${API_URL}/themes`);
   if (!res.ok) throw new Error("Failed to fetch themes");
-  return res.json();
+  const data: RawTheme[] = await res.json();
+  return data.map(mapTheme);
 }
 
 export async function getTheme(id: string): Promise<Theme> {
   const res = await fetch(`${API_URL}/themes/${id}`);
   if (!res.ok) throw new Error("Failed to fetch theme");
-  return res.json();
+  const raw: RawTheme = await res.json();
+  return mapTheme(raw);
 }
 
 export async function createTheme(data: {
@@ -114,7 +202,8 @@ export async function createTheme(data: {
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to create theme");
-  return res.json();
+  const raw: RawTheme = await res.json();
+  return mapTheme(raw);
 }
 
 export async function updateTheme(
@@ -131,7 +220,8 @@ export async function updateTheme(
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update theme");
-  return res.json();
+  const raw: RawTheme = await res.json();
+  return mapTheme(raw);
 }
 
 export async function deleteTheme(id: string): Promise<void> {
@@ -144,5 +234,6 @@ export async function deleteTheme(id: string): Promise<void> {
 export async function getThemeEntries(themeId: string): Promise<Entry[]> {
   const res = await fetch(`${API_URL}/themes/${themeId}/entries`);
   if (!res.ok) throw new Error("Failed to fetch theme entries");
-  return res.json();
+  const data: RawEntry[] = await res.json();
+  return data.map(mapEntry);
 }

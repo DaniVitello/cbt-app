@@ -2,9 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import type { Exercise, Answers } from "@/types/exercise";
+import { exercises } from "@/data/exercises";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 type Props = {
   exercise: Exercise;
@@ -78,7 +79,7 @@ export function CompletionScreen({
                 <li key={nextId}>
                   <Link href={`/exercises/${nextId}`}>
                     <Button variant="link" className="p-0">
-                      {nextId}
+                      {exercises.find((e) => e.id === nextId)?.title ?? nextId}
                     </Button>
                   </Link>
                 </li>

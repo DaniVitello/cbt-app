@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { exercises } from "@/data/exercises";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

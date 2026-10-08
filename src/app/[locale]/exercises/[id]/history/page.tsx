@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
-import { getEntries, deleteEntry } from "@/lib/api";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { getEntries, deleteEntry, type Entry } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -14,6 +15,9 @@ const PAGE_SIZE = 20;
 export default function HistoryPage() {
   const params = useParams<{ id: string }>();
   const queryClient = useQueryClient();
+  const locale = useLocale();
+  const t = useTranslations("history");
+  const tc = useTranslations("common");
   const [offset, setOffset] = useState(0);
 
   const { data: entries, isLoading, error } = useQuery({
@@ -30,12 +34,12 @@ export default function HistoryPage() {
   });
 
   const handleDelete = (id: string) => {
-    if (window.confirm("¿Estás seguro de que querés borrar esta entrada?")) {
+    if (window.confirm(t("deleteConfirm"))) {
       deleteMutation.mutate(id);
     }
   };
 
-  const handleExport = (entry: any) => {
+  const handleExport = (entry: Entry) => {
     const blob = new Blob([JSON.stringify(entry, null, 2)], {
       type: "application/json",
     });
@@ -62,11 +66,11 @@ export default function HistoryPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
         <EmptyState
-          title="Error al cargar"
-          description="No se pudieron cargar las entradas. Intentá de nuevo."
+          title={t("errorTitle")}
+          description={t("errorDescription")}
           action={
             <Button onClick={() => queryClient.invalidateQueries()}>
-              Reintentar
+              {tc("retry")}
             </Button>
           }
         />
@@ -81,16 +85,16 @@ export default function HistoryPage() {
     <div className="mx-auto max-w-2xl px-4 py-8">
       <Link href={`/exercises/${params.id}`}>
         <Button variant="link" className="mb-6 p-0">
-          ← Volver al ejercicio
+          ← {t("backToExercise")}
         </Button>
       </Link>
 
-      <h1 className="mb-6 text-2xl font-bold">Historial</h1>
+      <h1 className="mb-6 text-2xl font-bold">{t("title")}</h1>
 
       {entryList.length === 0 ? (
         <EmptyState
-          title="Todavía no hay entradas guardadas."
-          description="Completá un ejercicio y aparecerá acá."
+          title={t("empty")}
+          description={t("emptyDescription")}
         />
       ) : (
         <>
@@ -102,7 +106,7 @@ export default function HistoryPage() {
               >
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(entry.createdAt).toLocaleString("es-AR")}
+                    {new Date(entry.createdAt).toLocaleString(locale)}
                   </p>
                   <span
                     className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${
@@ -111,7 +115,9 @@ export default function HistoryPage() {
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
-                    {entry.status === "completed" ? "Completado" : "Borrador"}
+                    {entry.status === "completed"
+                      ? t("completed")
+                      : t("draft")}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -120,7 +126,7 @@ export default function HistoryPage() {
                     size="sm"
                     onClick={() => handleExport(entry)}
                   >
-                    Exportar
+                    {tc("export")}
                   </Button>
                   <Button
                     variant="link"
@@ -128,7 +134,7 @@ export default function HistoryPage() {
                     className="text-red-600"
                     onClick={() => handleDelete(entry.id)}
                   >
-                    Borrar
+                    {tc("delete")}
                   </Button>
                 </div>
               </li>
@@ -140,7 +146,7 @@ export default function HistoryPage() {
                 variant="outline"
                 onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
               >
-                Cargar más
+                {t("loadMore")}
               </Button>
             </div>
           )}

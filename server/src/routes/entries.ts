@@ -67,8 +67,8 @@ export async function entryRoutes(app: FastifyInstance) {
     } = parsed.data;
 
     db.prepare(
-      `INSERT INTO entries (id, exercise_id, answers, status, exercise_version, theme_id, source_entry_id, measure_before, measure_after)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO entries (id, exercise_id, answers, status, exercise_version, theme_id, source_entry_id, measure_before, measure_after, completed_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CASE WHEN ? = 'completed' THEN datetime('now') ELSE NULL END)`
     ).run(
       id,
       exercise_id,
@@ -78,7 +78,8 @@ export async function entryRoutes(app: FastifyInstance) {
       theme_id,
       source_entry_id,
       measure_before,
-      measure_after
+      measure_after,
+      status
     );
 
     const entry = db.prepare("SELECT * FROM entries WHERE id = ?").get(id);

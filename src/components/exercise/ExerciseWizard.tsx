@@ -16,10 +16,17 @@ type Props = {
   exercise: Exercise;
   answers: Answers;
   onChange: (answers: Answers) => void;
-  onComplete?: () => void;
+  onComplete?: (measures: { before: number | null; after: number | null }) => void;
+  onBackToHome?: () => void;
 };
 
-export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Props) {
+export function ExerciseWizard({
+  exercise,
+  answers,
+  onChange,
+  onComplete,
+  onBackToHome,
+}: Props) {
   const t = useTranslations("exercise");
   const tc = useTranslations("common");
   const [currentStep, setCurrentStep] = useState(0);
@@ -42,7 +49,7 @@ export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Prop
   const handleNext = () => {
     if (isLastStep) {
       setIsComplete(true);
-      onComplete?.();
+      onComplete?.({ before: measureBefore, after: measureAfter });
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -63,7 +70,7 @@ export function ExerciseWizard({ exercise, answers, onChange, onComplete }: Prop
         answers={answers}
         measureBefore={measureBefore}
         measureAfter={measureAfter}
-        onBackToHome={onComplete || (() => {})}
+        onBackToHome={onBackToHome ?? (() => {})}
       />
     );
   }

@@ -16,7 +16,7 @@ export function TextField({ field, value, onChange }: Props) {
       <Label htmlFor={field.id}>{field.label}</Label>
       <Input
         id={field.id}
-        value={value}
+        value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder}
       />

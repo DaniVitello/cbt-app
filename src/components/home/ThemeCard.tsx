@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Theme } from "@/lib/api";
 
@@ -14,6 +13,7 @@ interface ThemeCardProps {
 
 export function ThemeCard({ themes, isLoading }: ThemeCardProps) {
   const t = useTranslations("home");
+  const tt = useTranslations("theme");
 
   if (isLoading) {
     return (
@@ -44,7 +44,7 @@ export function ThemeCard({ themes, isLoading }: ThemeCardProps) {
             </CardHeader>
             <CardContent>
               <p className="mb-2 text-sm text-muted-foreground">
-                {theme.status === "in_progress" ? "En progreso" : "Abierto"}
+                {tt(`status.${theme.status}`)}
               </p>
               <Link href={`/themes/${theme.id}`}>
                 <Button variant="outline" size="sm">

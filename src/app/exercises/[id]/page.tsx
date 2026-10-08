@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { exercises } from "@/data/exercises";
-import { ExerciseForm } from "@/components/exercise/ExerciseForm";
+import { ExerciseWizard } from "@/components/exercise/ExerciseWizard";
 import { getEntries, createEntry, updateEntry } from "@/lib/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
@@ -111,7 +111,7 @@ export default function ExercisePage() {
         )}
       </div>
 
-      <ExerciseForm
+      <ExerciseWizard
         exercise={exercise}
         answers={answers}
         onChange={setAnswers}

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import "./globals.css";
+import "../globals.css";
 import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,17 +14,16 @@ export const metadata: Metadata = {
   description: "Ejercicios de terapia cognitivo-conductual",
 };
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<Record<string, string | string[] | undefined>>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale: rawLocale } = await params;
-  const locale = Array.isArray(rawLocale) ? rawLocale[0] : rawLocale;
+  const { locale } = await params;
 
-  if (!locale || !routing.locales.includes(locale as "es" | "en")) {
+  if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 

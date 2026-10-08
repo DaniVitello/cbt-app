@@ -9,11 +9,16 @@ export async function entryRoutes(app: FastifyInstance) {
   });
 
   app.get("/api/entries", async (request) => {
-    const { exercise_id, theme_id, status } = request.query as {
+    const { exercise_id, theme_id, status, limit, offset } = request.query as {
       exercise_id?: string;
       theme_id?: string;
       status?: string;
+      limit?: string;
+      offset?: string;
     };
+
+    const limitNum = Math.min(parseInt(limit ?? "20", 10), 100);
+    const offsetNum = parseInt(offset ?? "0", 10);
 
     let query = "SELECT * FROM entries WHERE 1=1";
     const params: any[] = [];
@@ -31,7 +36,8 @@ export async function entryRoutes(app: FastifyInstance) {
       params.push(status);
     }
 
-    query += " ORDER BY created_at DESC";
+    query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
+    params.push(limitNum, offsetNum);
 
     const entries = db.prepare(query).all(...params);
     return entries.map(parseEntry);

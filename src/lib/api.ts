@@ -27,11 +27,15 @@ export async function getEntries(filter?: {
   exerciseId?: string;
   themeId?: string;
   status?: string;
+  limit?: number;
+  offset?: number;
 }): Promise<Entry[]> {
   const params = new URLSearchParams();
   if (filter?.exerciseId) params.set("exercise_id", filter.exerciseId);
   if (filter?.themeId) params.set("theme_id", filter.themeId);
   if (filter?.status) params.set("status", filter.status);
+  if (filter?.limit) params.set("limit", filter.limit.toString());
+  if (filter?.offset) params.set("offset", filter.offset.toString());
 
   const url = `${API_URL}/entries${params.toString() ? `?${params}` : ""}`;
   const res = await fetch(url);

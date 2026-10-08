@@ -1,18 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { getEntries, deleteEntry } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
+
+const PAGE_SIZE = 20;
 
 export default function HistoryPage() {
   const params = useParams<{ id: string }>();
   const queryClient = useQueryClient();
+  const [offset, setOffset] = useState(0);
 
-  const { data: entries, isLoading } = useQuery({
-    queryKey: ["entries", params.id],
-    queryFn: () => getEntries({ exerciseId: params.id }),
+  const { data: entries, isLoading, error } = useQuery({
+    queryKey: ["entries", params.id, offset],
+    queryFn: () =>
+      getEntries({ exerciseId: params.id, limit: PAGE_SIZE, offset }),
   });
 
   const deleteMutation = useMutation({
@@ -42,11 +49,33 @@ export default function HistoryPage() {
 
   if (isLoading) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">Cargando...</p>
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <Skeleton className="h-8 w-32" />
+        <div className="mt-6">
+          <SkeletonList />
+        </div>
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <EmptyState
+          title="Error al cargar"
+          description="No se pudieron cargar las entradas. Intentá de nuevo."
+          action={
+            <Button onClick={() => queryClient.invalidateQueries()}>
+              Reintentar
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
+  const entryList = entries ?? [];
+  const hasMore = entryList.length === PAGE_SIZE;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -58,52 +87,75 @@ export default function HistoryPage() {
 
       <h1 className="mb-6 text-2xl font-bold">Historial</h1>
 
-      {!entries || entries.length === 0 ? (
-        <p className="text-muted-foreground">
-          Todavía no hay entradas guardadas.
-        </p>
+      {entryList.length === 0 ? (
+        <EmptyState
+          title="Todavía no hay entradas guardadas."
+          description="Completá un ejercicio y aparecerá acá."
+        />
       ) : (
-        <ul className="flex flex-col gap-3">
-          {entries.map((entry) => (
-            <li
-              key={entry.id}
-              className="flex items-center justify-between rounded-lg border p-4"
-            >
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(entry.createdAt).toLocaleString("es-AR")}
-                </p>
-                <span
-                  className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${
-                    entry.status === "completed"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {entry.status === "completed" ? "Completado" : "Borrador"}
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => handleExport(entry)}
-                >
-                  Exportar
-                </Button>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-red-600"
-                  onClick={() => handleDelete(entry.id)}
-                >
-                  Borrar
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="flex flex-col gap-3">
+            {entryList.map((entry) => (
+              <li
+                key={entry.id}
+                className="flex items-center justify-between rounded-lg border p-4"
+              >
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(entry.createdAt).toLocaleString("es-AR")}
+                  </p>
+                  <span
+                    className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${
+                      entry.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {entry.status === "completed" ? "Completado" : "Borrador"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => handleExport(entry)}
+                  >
+                    Exportar
+                  </Button>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-red-600"
+                    onClick={() => handleDelete(entry.id)}
+                  >
+                    Borrar
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {hasMore && (
+            <div className="mt-4 text-center">
+              <Button
+                variant="outline"
+                onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
+              >
+                Cargar más
+              </Button>
+            </div>
+          )}
+        </>
       )}
+    </div>
+  );
+}
+
+function SkeletonList() {
+  return (
+    <div className="flex flex-col gap-3">
+      {[1, 2, 3].map((i) => (
+        <Skeleton key={i} className="h-20" />
+      ))}
     </div>
   );
 }

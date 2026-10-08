@@ -28,13 +28,21 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
-
-  ALTER TABLE entries ADD COLUMN exercise_version INTEGER NOT NULL DEFAULT 1;
-  ALTER TABLE entries ADD COLUMN theme_id TEXT;
-  ALTER TABLE entries ADD COLUMN source_entry_id TEXT;
-  ALTER TABLE entries ADD COLUMN measure_before REAL;
-  ALTER TABLE entries ADD COLUMN measure_after REAL;
-  ALTER TABLE entries ADD COLUMN completed_at TEXT;
 `);
+
+// Idempotent migrations: check if column exists before adding
+function addColumnIfExists(table: string, column: string, definition: string) {
+  const cols = db.pragma(`table_info(${table})`) as Array<{ name: string }>;
+  if (!cols.some((c) => c.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition};`);
+  }
+}
+
+addColumnIfExists("entries", "exercise_version", "INTEGER NOT NULL DEFAULT 1");
+addColumnIfExists("entries", "theme_id", "TEXT");
+addColumnIfExists("entries", "source_entry_id", "TEXT");
+addColumnIfExists("entries", "measure_before", "REAL");
+addColumnIfExists("entries", "measure_after", "REAL");
+addColumnIfExists("entries", "completed_at", "TEXT");
 
 export default db;

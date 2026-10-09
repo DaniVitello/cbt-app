@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ const categories = ["thoughts", "anxiety", "action", "selfcare"] as const;
 
 export function ExerciseCatalog() {
   const t = useTranslations("home");
+  const exercises = useExercises();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!isOpen) {

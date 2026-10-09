@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface StepperProps {
@@ -10,8 +11,10 @@ interface StepperProps {
 }
 
 export function Stepper({ steps, currentStep, onStepClick, className }: StepperProps) {
+  const t = useTranslations("exercise");
+
   return (
-    <nav aria-label="Progreso" className={cn("flex items-center gap-2", className)}>
+    <nav aria-label={t("progressNav")} className={cn("flex items-center gap-2", className)}>
       {steps.map((step, index) => {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;

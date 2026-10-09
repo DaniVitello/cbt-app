@@ -2,7 +2,7 @@
 
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const intentMap = {
@@ -21,6 +21,7 @@ const intentIcons = {
 
 export function IntentGrid() {
   const t = useTranslations("home");
+  const exercises = useExercises();
 
   return (
     <section className="mb-10">

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { Exercise, Answers } from "@/types/exercise";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/routing";
@@ -13,6 +13,10 @@ type Props = {
   measureBefore: number | null;
   measureAfter: number | null;
   onBackToHome: () => void;
+  /** Entry completada de la que viene la cadena; null = aún no disponible o no aplica. */
+  sourceEntryId: string | null;
+  /** true mientras el guardado de la completion está en vuelo. */
+  isSaving: boolean;
 };
 
 export function CompletionScreen({
@@ -21,8 +25,15 @@ export function CompletionScreen({
   measureBefore,
   measureAfter,
   onBackToHome,
+  sourceEntryId,
+  isSaving,
 }: Props) {
   const t = useTranslations("exercise");
+  const tc = useTranslations("common");
+  const exercises = useExercises();
+  // Links de cadena deshabilitados hasta que la entry esté guardada, así
+  // ?source= nunca se pierde por un click demasiado rápido.
+  const waitingForSave = isSaving && sourceEntryId === null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -75,15 +86,36 @@ export function CompletionScreen({
           </CardHeader>
           <CardContent>
             <ul className="flex flex-col gap-2">
-              {exercise.next.map((nextId) => (
-                <li key={nextId}>
-                  <Link href={`/exercises/${nextId}`}>
-                    <Button variant="link" className="p-0">
-                      {exercises.find((e) => e.id === nextId)?.title ?? nextId}
-                    </Button>
-                  </Link>
-                </li>
-              ))}
+              {exercise.next.map((nextId) => {
+                const title = exercises.find((e) => e.id === nextId)?.title ?? nextId;
+                if (waitingForSave) {
+                  return (
+                    <li key={nextId} className="flex items-center gap-2">
+                      <Button variant="link" className="p-0" disabled>
+                        {title}
+                      </Button>
+                      <span className="text-sm text-muted-foreground">
+                        {tc("saving")}
+                      </span>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={nextId}>
+                    <Link
+                      href={
+                        sourceEntryId
+                          ? `/exercises/${nextId}?source=${sourceEntryId}`
+                          : `/exercises/${nextId}`
+                      }
+                    >
+                      <Button variant="link" className="p-0">
+                        {title}
+                      </Button>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </CardContent>
         </Card>

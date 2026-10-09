@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { getTheme, getThemeEntries } from "@/lib/api";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +15,7 @@ export default function ThemePage() {
   const t = useTranslations("exercise");
   const tt = useTranslations("theme");
   const locale = useLocale();
+  const exercises = useExercises();
 
   const { data: theme, isLoading: themeLoading } = useQuery({
     queryKey: ["theme", params.id],

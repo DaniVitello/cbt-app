@@ -18,6 +18,10 @@ type Props = {
   onChange: (answers: Answers) => void;
   onComplete?: (measures: { before: number | null; after: number | null }) => void;
   onBackToHome?: () => void;
+  /** Entry recién completada; habilita el prefill del paso siguiente (?source=). */
+  completedEntryId?: string | null;
+  /** true mientras la completion sigue guardando (links de cadena deshabilitados). */
+  isSaving?: boolean;
 };
 
 export function ExerciseWizard({
@@ -26,6 +30,8 @@ export function ExerciseWizard({
   onChange,
   onComplete,
   onBackToHome,
+  completedEntryId = null,
+  isSaving = false,
 }: Props) {
   const t = useTranslations("exercise");
   const tc = useTranslations("common");
@@ -71,6 +77,8 @@ export function ExerciseWizard({
         measureBefore={measureBefore}
         measureAfter={measureAfter}
         onBackToHome={onBackToHome ?? (() => {})}
+        sourceEntryId={completedEntryId}
+        isSaving={isSaving}
       />
     );
   }

@@ -7,10 +7,11 @@ import { IntentGrid } from "@/components/home/IntentGrid";
 import { ContinueCard } from "@/components/home/ContinueCard";
 import { ThemeCard } from "@/components/home/ThemeCard";
 import { ExerciseCatalog } from "@/components/home/ExerciseCatalog";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 
 export default function Home() {
   const t = useTranslations("home");
+  const exercises = useExercises();
 
   const { data: entries, isLoading: entriesLoading } = useQuery({
     queryKey: ["entries"],

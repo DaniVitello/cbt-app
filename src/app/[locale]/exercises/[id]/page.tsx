@@ -1,13 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
-import { exercises } from "@/data/exercises";
+import { useExercises } from "@/hooks/useExercises";
 import { ExerciseWizard } from "@/components/exercise/ExerciseWizard";
-import { getEntries, createEntry, updateEntry } from "@/lib/api";
+import { getEntries, getEntry, createEntry, updateEntry } from "@/lib/api";
+import { getPrefill } from "@/lib/prefill";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
 
@@ -15,14 +16,48 @@ type SaveStatus = "idle" | "saving" | "saved" | "error";
 type Measures = { before: number | null; after: number | null };
 
 export default function ExercisePage() {
+  return (
+    <Suspense fallback={null}>
+      <ExerciseShell />
+    </Suspense>
+  );
+}
+
+/**
+ * Uso de useSearchParams requiere estar dentro de un Suspense (regla de Next).
+ * Este shell no guarda estado: ExerciseRoot se monta de nuevo con `key` al
+ * cambiar de ejercicio, evitando que answers/refs/debounce se filtren entre
+ * ejercicios (el App Router reutiliza el componente al cambiar sólo [id]).
+ */
+function ExerciseShell() {
   const params = useParams<{ id: string }>();
-  const exercise = exercises.find((e) => e.id === params.id);
+  const searchParams = useSearchParams();
+
+  return (
+    <ExerciseRoot
+      key={params.id}
+      exerciseId={params.id}
+      sourceId={searchParams.get("source")}
+    />
+  );
+}
+
+type RootProps = {
+  exerciseId: string;
+  sourceId: string | null;
+};
+
+function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
+  const exercises = useExercises();
+  const exercise = exercises.find((e) => e.id === exerciseId);
   const queryClient = useQueryClient();
   const router = useRouter();
   const t = useTranslations("exercise");
   const tc = useTranslations("common");
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
+  const [prefilled, setPrefilled] = useState(false);
+  const [completedEntryId, setCompletedEntryId] = useState<string | null>(null);
   const debouncedAnswers = useDebounce(answers, 500);
 
   // Evita el doble PUT (la invalidación de queries re- disparaba el effect)
@@ -30,17 +65,46 @@ export default function ExercisePage() {
   const completedRef = useRef(false);
   const lastSavedRef = useRef<Record<string, unknown> | null>(null);
   const savePromiseRef = useRef<Promise<unknown> | null>(null);
+  // La inicialización (entry existente o prefill) ocurre una sola vez.
+  const initializedRef = useRef(false);
 
   const { data: entries, isLoading } = useQuery({
-    queryKey: ["entries", params.id],
-    queryFn: () => getEntries({ exerciseId: params.id }),
+    queryKey: ["entries", exerciseId],
+    queryFn: () => getEntries({ exerciseId }),
   });
 
+  const { data: sourceEntry, isError: sourceError } = useQuery({
+    queryKey: ["entry", sourceId],
+    queryFn: () => getEntry(sourceId as string),
+    enabled: sourceId !== null,
+  });
+
+  // Esperamos la fuente del prefill antes de mostrar el formulario, así el
+  // usuario nunca ve (ni tipea en) campos vacíos que se van a completar solos.
+  const sourcePending =
+    sourceId !== null && sourceEntry === undefined && !sourceError;
+
+  // Inicialización: entry existente > prefill desde ?source > vacío.
   useEffect(() => {
-    if (entries && entries.length > 0) {
+    if (initializedRef.current || entries === undefined || sourcePending) return;
+    if (entries.length > 0) {
+      // Ya hay un intento de este ejercicio: retomarlo, sin pisarlo con prefill.
       setAnswers(entries[0].answers);
+      initializedRef.current = true;
+      return;
     }
-  }, [entries]);
+    if (sourceId && sourceEntry && exercise) {
+      const sourceExercise = exercises.find((e) => e.id === sourceEntry.exerciseId);
+      const prefill = sourceExercise
+        ? getPrefill(sourceExercise, exercise, sourceEntry.answers)
+        : {};
+      if (Object.keys(prefill).length > 0) {
+        setAnswers(prefill);
+        setPrefilled(true);
+      }
+    }
+    initializedRef.current = true;
+  }, [entries, sourceEntry, sourcePending, sourceId, exercise]);
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -51,14 +115,15 @@ export default function ExercisePage() {
         });
       }
       return createEntry({
-        exerciseId: params.id,
+        exerciseId,
         answers: debouncedAnswers,
         status: "draft",
+        sourceEntryId: sourceId,
       });
     },
     onSuccess: () => {
       setSaveStatus("saved");
-      queryClient.invalidateQueries({ queryKey: ["entries", params.id] });
+      queryClient.invalidateQueries({ queryKey: ["entries", exerciseId] });
     },
     onError: () => {
       lastSavedRef.current = null;
@@ -91,7 +156,7 @@ export default function ExercisePage() {
     mutationFn: async (measures: Measures) => {
       // Esperamos cualquier autoguardado en vuelo para no duplicar la entry.
       await savePromiseRef.current;
-      const fresh = await getEntries({ exerciseId: params.id, limit: 1 });
+      const fresh = await getEntries({ exerciseId, limit: 1 });
       const payload = {
         answers,
         status: "completed" as const,
@@ -102,15 +167,18 @@ export default function ExercisePage() {
         return updateEntry(fresh[0].id, payload);
       }
       return createEntry({
-        exerciseId: params.id,
+        exerciseId,
         answers,
         status: "completed",
         measureBefore: measures.before,
         measureAfter: measures.after,
+        sourceEntryId: sourceId,
       });
     },
-    onSuccess: () => {
+    onSuccess: (entry) => {
       setSaveStatus("saved");
+      // Habilita el link de "siguiente paso" con ?source=<entry completada>.
+      setCompletedEntryId(entry.id);
       queryClient.invalidateQueries({ queryKey: ["entries"] });
     },
     onError: () => {
@@ -139,7 +207,7 @@ export default function ExercisePage() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || sourcePending) {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{tc("loading")}</p>
@@ -155,7 +223,7 @@ export default function ExercisePage() {
             ← {t("backToList")}
           </Button>
         </Link>
-        <Link href={`/exercises/${params.id}/history`}>
+        <Link href={`/exercises/${exerciseId}/history`}>
           <Button variant="link" className="p-0">
             {t("history")}
           </Button>
@@ -174,12 +242,20 @@ export default function ExercisePage() {
         )}
       </div>
 
+      {prefilled && (
+        <div className="mb-4 rounded-lg border bg-muted px-3 py-2 text-sm text-muted-foreground">
+          {t("prefilled")}
+        </div>
+      )}
+
       <ExerciseWizard
         exercise={exercise}
         answers={answers}
         onChange={setAnswers}
         onComplete={handleComplete}
         onBackToHome={handleBackToHome}
+        completedEntryId={completedEntryId}
+        isSaving={saveStatus === "saving"}
       />
     </div>
   );

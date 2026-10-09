@@ -105,6 +105,13 @@ export async function getEntries(filter?: {
   return data.map(mapEntry);
 }
 
+export async function getEntry(id: string): Promise<Entry> {
+  const res = await fetch(`${API_URL}/entries/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch entry");
+  const raw: RawEntry = await res.json();
+  return mapEntry(raw);
+}
+
 export async function createEntry(data: {
   exerciseId: string;
   answers: Record<string, unknown>;

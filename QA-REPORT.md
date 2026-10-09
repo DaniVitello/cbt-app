@@ -70,6 +70,22 @@
 - **Síntoma:** los botones de ayuda no se renderizan en ningún ejercicio.
 - **Causa:** el `ExerciseWizard` solo los muestra si `exercise.help` existe (`{exercise.help && ...}`), pero ningún ejercicio de `src/data/exercises.ts` define el campo `help`.
 - **Fix sugerido:** poblar `help: { purpose, example }` en las definiciones de ejercicio (contenido propio, no copiar de los PDFs de PositivePsychology.com — ver regla de copyright).
+- **Estado: ✅ RESUELTO** — `help` se pobló en los 15 ejercicios (commit `5648e3f`). Verificado en browser: los botones renderizan y el contenido se localiza en `/en` ("It's a chained Socratic question: each answer takes you one step deeper...").
+
+#### B13 — `/en` no está en inglés: el contenido de los ejercicios queda en español (punto 1.2)
+- **Síntoma:** en `/en`, la UI chrome sí traduce ("Exercises", "What do you need today?", "What is this exercise for?"), pero títulos de ejercicios, descripciones, títulos de secciones y labels de campos siguen en español ("Descatastrofizar", "La técnica de la flecha hacia abajo...", "Escribí la catástrofe con precisión...").
+- **Criterio incumplido:** checklist 1.2 — *"Cambiar URL a /en → Todo en inglés"*. Falla el caso negativo: queda texto en español.
+- **Causa:** `messages/{es,en}.json` solo cubre la UI chrome (namespaces `common`, `home`, `exercise`, `history`, `categories`). El contenido de los ejercicios vive hardcodeado en español en `src/data/exercises.ts` (título, descripción, `sections[].title`, `fields[].label`, `placeholder`, opciones, `help`) y nunca pasa por `next-intl`.
+- **Estado: ✅ RESUELTO** — implementada la **opción B** (datos por locale):
+  - `src/data/exercises.es.ts` — contenido original en español (fuente de la estructura).
+  - `src/data/exercises.en.ts` — traducción completa al inglés: mismos ids, secciones, fields y valores; solo cambian los strings visibles.
+  - `src/data/exercises.ts` — resolver `getExercises(locale)`; conserva el export `exercises` (ES) para los tests.
+  - `src/hooks/useExercises.ts` — hook `useExercises()` con `useLocale()` de next-intl. Los 6 consumidores (`IntentGrid`, `ExerciseCatalog`, `CompletionScreen`, home, `exercises/[id]`, `themes/[id]`) lo usan en vez del import estático.
+  - `src/data/exercises.parity.test.ts` — test de paridad estructural ES↔EN (falla si un locale se desincroniza: ids, orden, tipos, `help`/`measure`, `outputs`/`accepts`/`next`). Corre en `npm test`.
+  - Además se localizaron dos strings visibles hardcodeados: `aria-label` del stepper (`ui/stepper.tsx` → key `exercise.progressNav`) y placeholder del select (`exercise/ChoiceField.tsx` → key `exercise.selectPlaceholder`), ambos en `messages/{es,en}.json`.
+- **Verificación:** `/en` home + detalle + PMR completos en inglés (0 marcas `¿`/voseo en DOM hidratado); `/es` sin regresiones; `tsc --noEmit` limpio (salvo error preexistente de `globals.css`); `vitest` 11/11.
+- **Revisión de tono EN pendiente** (traducciones donde se tomó una elección, revisar si al dueño): `cognitive-restructuring.help.example` ("Quedé como un ignorante" → "I came off as an ignoramus"), `challenging-catastrophic.help.example` ("antes de entregar" → "before the deadline"), opciones de `cataloging-inner-rules` ("Tirarla/Modificarla" → "Toss it/Change it"), `core-beliefs-suitcases.description` (voseo resuelto en 2do persona uniforme), `thought-record.description` ("aprobado versus reprobado" → "pass versus fail").
+- **Nota:** existe código huérfano sin traducir en `src/components/{ExerciseForm,FieldRenderer,ChoiceField,GroupField}.tsx` — nada lo importa (el árbol activo es `src/components/exercise/*`); candidato a borrar.
 
 ---
 
@@ -86,7 +102,8 @@
 
 | Punto | Resultado |
 |---|---|
-| 1.1–1.4 i18n | `/` redirige a `/es`; `/en` en inglés; `/fr` da 404; vuelve a `/es` |
+| 1.1, 1.3, 1.4 i18n | `/` redirige a `/es`; `/fr` da 404; vuelve a `/es` |
+| 1.2 i18n | ✅ `/en` completo — contenido de ejercicios localizado por locale (datos por locale + test de paridad, ver **B13**) |
 | 2.1–2.5 Home | 4 tarjetas de intención con sus ejercicios; estados vacíos correctos |
 | 2.7 Catálogo | Abrir con "Todos los ejercicios" y cerrar con "✕" funciona |
 | 3.1–3.6 Wizard | Stepper con pasos, ProgressBar, Atrás/Siguiente, salto directo por stepper |
@@ -104,10 +121,10 @@
 
 ## ⚠️ No testeado / limitaciones
 
-- **1.2 textos sin traducir (parcial):** la UI chrome se traduce, pero el **contenido de los ejercicios** (títulos, descripciones, labels de campos) está solo en español. Definir si es intencional.
 - **10.4 lector de pantalla:** no hay lector disponible en el entorno de pruebas. Se verificó que `aria-live` y `labels` existen en el DOM, pero la experiencia real no se validó.
 - **10.2 Enter en botones:** no se simuló teclado real; los elementos son `<button>` nativos (comportamiento por defecto OK).
 - **Tema persistente (9.2–9.3):** no testeable porque falta el botón (B5).
+- **`npx tsc --noEmit` reporta 1 error preexistente** en `src/app/[locale]/layout.tsx` (side-effect import de `globals.css`, con TS 6.0.3). No es de QA: no bloquea `next build` ni `vitest`.
 
 ---
 
@@ -117,14 +134,15 @@
 2. **B2 + B6 + B7** — misma causa raíz: mapeo snake_case → camelCase centralizado en `src/lib/api.ts`
 3. **B3 + B4** — mismo fix: conectar `onComplete` en `ExercisePage` (navega a home + marca `completed`)
 4. **B9** — namespace de traducciones en `ExerciseCatalog` (arreglo de 2 líneas)
-5. **B5** — crear `ThemeToggle`
-6. **B8 + B10** — arreglos de display (título del next, badge del tema)
-7. **B1 + B11** — requieren decisión de contenido: definir `measure` y `help` en los ejercicios
+5. **B13** — ✅ resuelto (opción B aplicada — ver detalle arriba)
+6. **B5** — crear `ThemeToggle`
+7. **B8 + B10** — arreglos de display (título del next, badge del tema)
+8. **B1 + B11** — ✅ ambos resueltos (`measure` en 7 ejercicios, `help` en 15 — commit `5648e3f`)
 
 ---
 
 ## ❓ Preguntas para el dueño del proyecto
 
-1. ¿Los ejercicios deben traducirse al inglés o solo la UI?
+1. ~~**B13 — alcance de la traducción**~~ → resuelto: se aplicó la opción B (traducción completa del contenido). Lo único que queda a criterio del dueño es revisar el tono de algunos strings EN (lista en B13).
 2. ¿`measure` y `help` estaban planificados y se perdieron, o la lista de pruebas quedó adelantada al código?
 3. Para el mismatch de casing: ¿mapear en la API (devolver camelCase) o en el frontend (`api.ts`)? Recomendación: **en `api.ts`**, un solo punto de transformación.

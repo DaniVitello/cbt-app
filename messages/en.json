@@ -42,6 +42,8 @@
     }
   },
   "exercise": {
+    "progressNav": "Progress",
+    "selectPlaceholder": "Select an option",
     "history": "View history",
     "backToList": "Back to list",
     "saving": "Saving...",
@@ -57,6 +59,7 @@
     "completionSummary": "Summary of your answers",
     "measureChange": "Before {before} → Now {after}",
     "nextSuggested": "Suggested next step",
+    "prefilled": "We prefilled some fields with the answer from your previous exercise. You can edit anything.",
     "backToHome": "Back to home",
     "notFound": "Exercise not found."
   },

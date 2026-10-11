@@ -1,13 +1,6 @@
-import Fastify from "fastify";
-import { entryRoutes } from "./routes/entries.js";
-import { themeRoutes } from "./routes/themes.js";
+import { buildApp } from "./app.js";
 
-const app = Fastify({
-  logger: true,
-});
-
-await app.register(entryRoutes);
-await app.register(themeRoutes);
+const app = await buildApp({ logger: true });
 
 const port = 3001;
 const host = "127.0.0.1";

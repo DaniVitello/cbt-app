@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
 import { useExercises } from "@/hooks/useExercises";
 import { ExerciseWizard } from "@/components/exercise/ExerciseWizard";
+import { CompletionScreen } from "@/components/exercise/CompletionScreen";
 import { getEntries, getEntry, createEntry, updateEntry } from "@/lib/api";
 import { getPrefill } from "@/lib/prefill";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -58,6 +59,9 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
   const [prefilled, setPrefilled] = useState(false);
   const [completedEntryId, setCompletedEntryId] = useState<string | null>(null);
+  // Se completó en ESTA sesión (el wizard muestra su propio cierre).
+  // Distinto de "ya estaba completada al entrar" (solo lectura, D2).
+  const [completedInSession, setCompletedInSession] = useState(false);
   const debouncedAnswers = useDebounce(answers, 500);
 
   // Evita el doble PUT (la invalidación de queries re- disparaba el effect)
@@ -84,11 +88,18 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   const sourcePending =
     sourceId !== null && sourceEntry === undefined && !sourceError;
 
+  const existingEntry = entries !== undefined && entries.length > 0 ? entries[0] : null;
+  // D2: reabrir una entry ya completada = vista de solo lectura. No pisa
+  // respuestas, no revierte a draft. Completar en esta sesión sigue el
+  // flujo normal del wizard (completedInSession).
+  const readOnly = existingEntry?.status === "completed" && !completedInSession;
+
   // Inicialización una sola vez, en fase de render (patrón "derivar estado
   // al renderizar" de React): entry existente > prefill desde ?source > vacío.
   // Sin effect con setState: el formulario nunca pinta vacío para rellenarse
-  // después, y no hay renders en cascada.
-  if (!initialized && entries !== undefined && !sourcePending) {
+  // después, y no hay renders en cascada. En solo lectura no hay nada que
+  // inicializar (no hay formulario editable).
+  if (!initialized && entries !== undefined && !sourcePending && !readOnly) {
     if (entries.length > 0) {
       // Ya hay un intento de este ejercicio: retomarlo, sin pisarlo con prefill.
       setAnswers(entries[0].answers);
@@ -132,6 +143,8 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
 
   useEffect(() => {
     if (completedRef.current) return;
+    // Solo lectura: jamás guardar (ni answers ni status) sobre una completada.
+    if (readOnly) return;
     const existing = entries && entries.length > 0 ? entries[0] : null;
     // misma referencia ⇒ son las respuestas que ya vienen guardadas, no hay nada nuevo
     const unchanged = existing !== null && existing.answers === debouncedAnswers;
@@ -187,6 +200,7 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
 
   const handleComplete = (measures: Measures) => {
     completedRef.current = true;
+    setCompletedInSession(true);
     setSaveStatus("saving");
     completeMutation.mutate(measures);
   };
@@ -241,21 +255,35 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
         )}
       </div>
 
-      {prefilled && (
-        <div className="mb-4 rounded-lg border bg-muted px-3 py-2 text-sm text-muted-foreground">
-          {t("prefilled")}
-        </div>
-      )}
+      {readOnly && existingEntry ? (
+        <CompletionScreen
+          exercise={exercise}
+          answers={existingEntry.answers}
+          measureBefore={existingEntry.measures.before ?? null}
+          measureAfter={existingEntry.measures.after ?? null}
+          onBackToHome={handleBackToHome}
+          sourceEntryId={existingEntry.id}
+          isSaving={false}
+        />
+      ) : (
+        <>
+          {prefilled && (
+            <div className="mb-4 rounded-lg border bg-muted px-3 py-2 text-sm text-muted-foreground">
+              {t("prefilled")}
+            </div>
+          )}
 
-      <ExerciseWizard
-        exercise={exercise}
-        answers={answers}
-        onChange={setAnswers}
-        onComplete={handleComplete}
-        onBackToHome={handleBackToHome}
-        completedEntryId={completedEntryId}
-        isSaving={saveStatus === "saving"}
-      />
+          <ExerciseWizard
+            exercise={exercise}
+            answers={answers}
+            onChange={setAnswers}
+            onComplete={handleComplete}
+            onBackToHome={handleBackToHome}
+            completedEntryId={completedEntryId}
+            isSaving={saveStatus === "saving"}
+          />
+        </>
+      )}
     </div>
   );
 }

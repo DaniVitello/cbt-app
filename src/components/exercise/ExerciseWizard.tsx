@@ -84,6 +84,14 @@ export function ExerciseWizard({
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Intro única del ejercicio: título + descripción una sola vez,
+          arriba para releer. Antes vivía en ExerciseForm y se repetía
+          una vez por campo del paso. */}
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold">{exercise.title}</h1>
+        <p className="text-muted-foreground">{exercise.description}</p>
+      </div>
+
       {/* Progress */}
       <div className="flex flex-col gap-2">
         <Stepper

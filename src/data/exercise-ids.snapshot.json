@@ -1,0 +1,183 @@
+{
+  "problem-solving": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "attempts-description",
+      "goal-description",
+      "outcome-description",
+      "problem-description"
+    ]
+  },
+  "decatastrophizing": {
+    "version": 1,
+    "measure": "catastrophe-likelihood",
+    "fields": [
+      "best-case",
+      "catastrophe-description",
+      "catastrophe-rating",
+      "coping-description",
+      "friend-perspective",
+      "likelihood-description",
+      "reassurance-description",
+      "reassurance-rating",
+      "worst-case"
+    ]
+  },
+  "rabbit-hole": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "outcomes-table",
+      "outcomes-table.negative",
+      "outcomes-table.positive"
+    ]
+  },
+  "core-beliefs-suitcases": {
+    "version": 1,
+    "measure": "core-belief-strength",
+    "fields": [
+      "core-beliefs",
+      "core-beliefs.belief-1",
+      "core-beliefs.belief-1.belief",
+      "core-beliefs.belief-1.reason-1",
+      "core-beliefs.belief-1.reason-2",
+      "core-beliefs.belief-1.reason-3",
+      "core-beliefs.belief-2",
+      "core-beliefs.belief-2.belief",
+      "core-beliefs.belief-2.reason-1",
+      "core-beliefs.belief-2.reason-2",
+      "core-beliefs.belief-2.reason-3",
+      "core-beliefs.belief-3",
+      "core-beliefs.belief-3.belief",
+      "core-beliefs.belief-3.reason-1",
+      "core-beliefs.belief-3.reason-2",
+      "core-beliefs.belief-3.reason-3"
+    ]
+  },
+  "i-will-survive": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "challenge-description",
+      "coping-description",
+      "supports-description"
+    ]
+  },
+  "cognitive-restructuring": {
+    "version": 1,
+    "measure": "thought-strength",
+    "fields": [
+      "event-description",
+      "restructure-description",
+      "thoughts-description"
+    ]
+  },
+  "behavioral-experiments": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "alternative-belief",
+      "alternative-belief-rating",
+      "carrying-out-description",
+      "experiment-description",
+      "observations-description",
+      "original-belief",
+      "original-belief-rating",
+      "reflection-description",
+      "results-rating"
+    ]
+  },
+  "thought-record": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "alternative-description",
+      "emotions-description",
+      "emotions-rating",
+      "pause-description",
+      "rerating",
+      "thoughts-description",
+      "trigger-description"
+    ]
+  },
+  "downward-arrow": {
+    "version": 1,
+    "measure": "thought-belief",
+    "fields": [
+      "about-you-description",
+      "meaning-description",
+      "situation-description",
+      "thoughts-description"
+    ]
+  },
+  "pmr": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "pmr-script"
+    ]
+  },
+  "challenging-catastrophic": {
+    "version": 1,
+    "measure": "fear-likelihood",
+    "fields": [
+      "awfulness-rating",
+      "best-case",
+      "coping-description",
+      "event-description",
+      "likelihood-description",
+      "reassurance-description",
+      "reflection-description",
+      "worst-case"
+    ]
+  },
+  "dysfunctional-thought-record": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "thought-record",
+      "thought-record.alternative",
+      "thought-record.date",
+      "thought-record.distortion",
+      "thought-record.emotion",
+      "thought-record.outcome",
+      "thought-record.situation",
+      "thought-record.thought"
+    ]
+  },
+  "disputing-irrational-beliefs": {
+    "version": 1,
+    "measure": "belief-strength",
+    "fields": [
+      "belief-description",
+      "question-1",
+      "question-2",
+      "question-3",
+      "question-4"
+    ]
+  },
+  "wdep-questions": {
+    "version": 1,
+    "measure": null,
+    "fields": [
+      "doing-description",
+      "evaluate-description",
+      "plan-description",
+      "want-description"
+    ]
+  },
+  "cataloging-inner-rules": {
+    "version": 1,
+    "measure": "rule-belief",
+    "fields": [
+      "advantages",
+      "decision",
+      "disadvantages",
+      "going-forward",
+      "infraction-description",
+      "origins-description",
+      "rule-description"
+    ]
+  }
+}

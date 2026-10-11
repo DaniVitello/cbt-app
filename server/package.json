@@ -11,7 +11,6 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "ajv": "^8.20.0",
     "better-sqlite3": "^11.10.0",
     "fastify": "^5.3.2",
     "zod": "^3.25.76"

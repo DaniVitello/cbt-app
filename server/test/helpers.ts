@@ -14,7 +14,22 @@ export function makeTempDbPath(): { path: string; cleanup: () => void } {
   const dir = mkdtempSync(join(tmpdir(), "cbt-test-"));
   return {
     path: join(dir, "test.db"),
-    cleanup: () => rmSync(dir, { recursive: true, force: true }),
+    cleanup: () => {
+      // Windows puede retener el lock del archivo unos ms después de close()
+      // (SO/antivirus), sobre todo tras mucho churn de DDL. Reintentos con
+      // backoff: si tras 10 intentos sigue bloqueado, es un leak real y debe fallar.
+      let lastError: unknown;
+      for (let i = 0; i < 10; i++) {
+        try {
+          rmSync(dir, { recursive: true, force: true });
+          return;
+        } catch (e) {
+          lastError = e;
+          Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 50);
+        }
+      }
+      throw lastError;
+    },
   };
 }
 

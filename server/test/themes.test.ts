@@ -111,6 +111,30 @@ describe("themes", () => {
     expect(entries[0].answers).toEqual({ paso: "respirar" });
   });
 
+  it("DELETE de un tema con entries deja las entries con theme_id en null (ON DELETE SET NULL)", async () => {
+    const theme = await app.inject({
+      method: "POST",
+      url: "/api/themes",
+      payload: { title: "Tema con entries" },
+    });
+    const themeId = theme.json().id;
+
+    const entry = await app.inject({
+      method: "POST",
+      url: "/api/entries",
+      payload: { exercise_id: "pmr", answers: { paso: 1 }, theme_id: themeId },
+    });
+    const entryId = entry.json().id;
+
+    const deleted = await app.inject({ method: "DELETE", url: `/api/themes/${themeId}` });
+    expect(deleted.statusCode).toBe(204);
+
+    const survivor = await app.inject({ method: "GET", url: `/api/entries/${entryId}` });
+    expect(survivor.statusCode).toBe(200);
+    expect(survivor.json().theme_id).toBeNull();
+    expect(survivor.json().answers).toEqual({ paso: 1 });
+  });
+
   it("DELETE borra (204) y después es 404", async () => {
     const created = await app.inject({
       method: "POST",

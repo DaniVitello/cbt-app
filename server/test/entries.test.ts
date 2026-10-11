@@ -128,6 +128,25 @@ describe("entries", () => {
     expect(missing.statusCode).toBe(404);
   });
 
+  it("DELETE de una entry origen deja source_entry_id en null en las derivadas", async () => {
+    const source = await app.inject({ method: "POST", url: "/api/entries", payload: baseEntry });
+    const sourceId = source.json().id;
+
+    const child = await app.inject({
+      method: "POST",
+      url: "/api/entries",
+      payload: { exercise_id: "core-beliefs-suitcases", answers: {}, source_entry_id: sourceId },
+    });
+    const childId = child.json().id;
+
+    const deleted = await app.inject({ method: "DELETE", url: `/api/entries/${sourceId}` });
+    expect(deleted.statusCode).toBe(204);
+
+    const survivor = await app.inject({ method: "GET", url: `/api/entries/${childId}` });
+    expect(survivor.statusCode).toBe(200);
+    expect(survivor.json().source_entry_id).toBeNull();
+  });
+
   it("DELETE borra (204) y después es 404", async () => {
     const created = await app.inject({ method: "POST", url: "/api/entries", payload: baseEntry });
     const id = created.json().id;

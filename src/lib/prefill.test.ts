@@ -6,6 +6,11 @@ import type { Answers, Exercise } from "../types/exercise";
 const downward = exercises.find((e) => e.id === "downward-arrow");
 const coreBeliefs = exercises.find((e) => e.id === "core-beliefs-suitcases");
 const disputing = exercises.find((e) => e.id === "disputing-irrational-beliefs");
+const thoughtRecord = exercises.find((e) => e.id === "thought-record");
+const restructuring = exercises.find((e) => e.id === "cognitive-restructuring");
+const challenging = exercises.find((e) => e.id === "challenging-catastrophic");
+const decatastrophizing = exercises.find((e) => e.id === "decatastrophizing");
+const behavioral = exercises.find((e) => e.id === "behavioral-experiments");
 
 function makeExercise(fields: { id: string }[], accepts?: Exercise["accepts"]): Exercise {
   return {
@@ -68,6 +73,42 @@ describe("getPrefill — cadena outputs → accepts", () => {
     });
 
     expect(result).toEqual({});
+  });
+});
+
+describe("getPrefill — cadenas 2 y 3", () => {
+  it("thought-record → restructuring: el pensamiento viaja (kind thought)", () => {
+    expect(thoughtRecord && restructuring).toBeTruthy();
+
+    const result = getPrefill(thoughtRecord!, restructuring!, {
+      "thoughts-description": "No le importo",
+    });
+
+    expect(result).toEqual({ "thoughts-description": "No le importo" });
+  });
+
+  it("challenging → decatastrophizing: el evento viaja (kind situation)", () => {
+    expect(challenging && decatastrophizing).toBeTruthy();
+
+    const result = getPrefill(challenging!, decatastrophizing!, {
+      "event-description": "Se rompe la compu antes de entregar",
+    });
+
+    expect(result).toEqual({
+      "catastrophe-description": "Se rompe la compu antes de entregar",
+    });
+  });
+
+  it("decatastrophizing → behavioral: la catástrofe viaja como creencia (kind belief)", () => {
+    expect(decatastrophizing && behavioral).toBeTruthy();
+
+    const result = getPrefill(decatastrophizing!, behavioral!, {
+      "catastrophe-description": "No voy a conseguir el trabajo",
+    });
+
+    expect(result).toEqual({
+      "original-belief": "No voy a conseguir el trabajo",
+    });
   });
 });
 

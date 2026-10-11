@@ -85,6 +85,9 @@ export const exercises: Exercise[] = [
         "Ej: En vez de '¿y si me va mal en la entrevista?', escribís la predicción concreta: 'No voy a conseguir el trabajo'. Después calificás qué tan probable es, no qué tan terrible suena.",
     },
     title: "Descatastrofizar",
+    accepts: [{ kind: "situation", intoFieldId: "catastrophe-description" }],
+    outputs: [{ fieldId: "catastrophe-description", kind: "belief" }],
+    next: ["behavioral-experiments"],
     description:
       "Usá esta hoja de trabajo de descatastrofización para ayudarte a reestructurar cognitivamente cuando sentís que te estás abrumando con pensamientos catastróficos. 'Descatastrofizar' se trata de explorar la realidad y los hechos de una situación en lugar de dejarte llevar por pensamientos de '¿Y si...?'. Esta hoja tiene 5 cajas para completar. Empezá arriba, donde vas a encontrar un espacio para identificar claramente la catástrofe que te está molestando. Indicá exactamente qué tenés en mente, antes de calificar cuán angustiante sería el escenario hipotético en una escala del 0% (no tan malo) al 100% (absolutamente terrible).",
     sections: [
@@ -409,6 +412,7 @@ export const exercises: Exercise[] = [
         "Ej: Evento: 'Me interrumpí en la reunión'. Pensamiento: 'Quedé como un ignorante'. Reestructuración: 'Me emocioné por el tema y participé; eso también se valora'.",
     },
     title: "Reestructuración cognitiva de un evento",
+    accepts: [{ kind: "thought", intoFieldId: "thoughts-description" }],
     description:
       "Cuando las cosas ya pasaron, especialmente cuando el resultado no fue el que esperábamos, podemos quedarnos pensando lo peor sobre nosotros mismos o sobre lo que sucedió. La reestructuración cognitiva es un proceso que ayuda a remodelar la cognición. Después de todo, es la creencia o el pensamiento relacionado con el evento, y no el evento en sí, lo que más afecta a la persona. Realizá los siguientes pasos para reestructurar tus pensamientos sobre un evento, dándole un marco positivo o aceptando lo que pasó.",
     sections: [
@@ -462,6 +466,7 @@ export const exercises: Exercise[] = [
         "Ej: Creencia: 'Si pido ayuda, me van a tomar por menos capaz'. Experimento: pedirle a un compañero que revise mi informe. Resultado: lo revisó y me dijo que el análisis estaba bueno.",
     },
     title: "Experimentos conductuales para poner a prueba creencias",
+    accepts: [{ kind: "belief", intoFieldId: "original-belief" }],
     description:
       "Un experimento conductual es una técnica de TCC que implica poner a prueba pensamientos automáticos negativos y reevaluar creencias y supuestos subyacentes. Esta técnica invita a las personas a ver los pensamientos negativos de manera objetiva en lugar de como verdades absolutas. Primero se identifica una creencia que se quiere poner a prueba. Luego se deriva una hipótesis específica de esta regla general, y se formula un experimento para poner a prueba dicha hipótesis.",
     sections: [
@@ -572,6 +577,8 @@ export const exercises: Exercise[] = [
         "Ej: Disparador: 'Mi amigo no me contestó el mensaje'. Pensamiento: 'No le importo'. Alternativa: 'Está trabajando; seguramente contesta después'.",
     },
     title: "Registro de pensamientos (Reestructuración cognitiva)",
+    outputs: [{ fieldId: "thoughts-description", kind: "thought" }],
+    next: ["cognitive-restructuring"],
     description:
       "Cuando adoptamos estilos de pensamiento defectuosos, puede ser útil completar un registro de pensamientos y considerar qué tipo de pensamiento se está disparando. A continuación se proporciona una lista de estilos de pensamiento defectuosos: Auto-culpa: en lugar de sentirte como la víctima, creés que sos responsable del dolor y la felicidad de todos los que te rodean. Pensamiento rígido: sabemos que tenemos la razón, pero otras personas no siempre estarán de acuerdo. Personalización: creer que todo lo que la gente dice y hace está de alguna manera relacionado con nosotros. Culpar: otras personas, organizaciones y el universo en general tienen la culpa de nuestros problemas. Generalizar lo específico: sacar una conclusión general basada en una sola ocurrencia. Lectura del pensamiento: creemos 'saber' lo que piensan los demás y por qué actúan como lo hacen, aunque no nos lo hayan dicho. Magnificación y filtrado: magnificamos las emociones negativas y filtramos todo lo que es positivo. Pensamiento polarizado: pensamos en situaciones y personas como todo o nada, ej: bueno versus malo, aprobado versus reprobado. Catastrofización: esperamos lo peor. Todo saldrá mal y tendrá el impacto más significativo. Trabajá con el cliente para completar el siguiente registro de pensamientos e identificar qué estilo de pensamiento se está aplicando.",
     sections: [
@@ -820,6 +827,8 @@ A menudo es más difícil lidiar adecuadamente con los desafíos cuando ya estam
         "Ej: Evento: 'Se me rompe la computadora antes de entregar'. Probabilidad: me pasó 1 vez en 5 años. Mejor escenario: la arreglo en 2 días; peor: pierdo la entrega y la recupero con una prórroga.",
     },
     title: "Desafiar pensamientos catastróficos",
+    outputs: [{ fieldId: "event-description", kind: "situation" }],
+    next: ["decatastrophizing"],
     description:
       "Creer que siempre va a pasar lo peor y magnificar su impacto puede ser muy dañino para tu bienestar mental. Trabajá a través del evento completando este ejercicio para entender el miedo y encontrar tranquilidad sobre que el peor desenlace no es inevitable.",
     sections: [

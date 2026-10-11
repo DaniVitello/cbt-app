@@ -85,6 +85,9 @@ export const exercisesEn: Exercise[] = [
         "E.g.: Instead of 'What if I do badly in the interview?', write the concrete prediction: 'I won't get the job'. Then rate how likely it is, not how terrible it sounds.",
     },
     title: "Decatastrophizing",
+    accepts: [{ kind: "situation", intoFieldId: "catastrophe-description" }],
+    outputs: [{ fieldId: "catastrophe-description", kind: "belief" }],
+    next: ["behavioral-experiments"],
     description:
       "Use this decatastrophizing worksheet to help yourself cognitively restructure when you feel you're getting overwhelmed by catastrophic thoughts. 'Decatastrophizing' is about exploring the reality and facts of a situation instead of getting carried away by 'What if...?' thoughts. This sheet has 5 boxes to fill in. Start at the top, where you'll find a space to clearly identify the catastrophe that's bothering you. State exactly what you have in mind, before rating how distressing the hypothetical scenario would be on a scale from 0% (not bad at all) to 100% (absolutely terrible).",
     sections: [
@@ -409,6 +412,7 @@ export const exercisesEn: Exercise[] = [
         "E.g.: Event: 'I interrupted in the meeting'. Thought: 'I came off as an ignoramus'. Restructuring: 'I got excited about the topic and chimed in; that's valued too'.",
     },
     title: "Cognitive restructuring of an event",
+    accepts: [{ kind: "thought", intoFieldId: "thoughts-description" }],
     description:
       "When things have already happened, especially when the outcome wasn't what we expected, we can end up thinking the worst about ourselves or about what happened. Cognitive restructuring is a process that helps reshape cognition. After all, it's the belief or thought related to the event, and not the event itself, that affects a person the most. Work through the following steps to restructure your thoughts about an event, giving it a positive frame or accepting what happened.",
     sections: [
@@ -462,6 +466,7 @@ export const exercisesEn: Exercise[] = [
         "E.g.: Belief: 'If I ask for help, people will see me as less capable'. Experiment: ask a coworker to review my report. Result: they reviewed it and told me the analysis was good.",
     },
     title: "Behavioral experiments to put beliefs to the test",
+    accepts: [{ kind: "belief", intoFieldId: "original-belief" }],
     description:
       "A behavioral experiment is a CBT technique that involves testing negative automatic thoughts and reevaluating underlying beliefs and assumptions. This technique invites people to look at negative thoughts objectively rather than as absolute truths. First, a belief you want to test is identified. Then a specific hypothesis is derived from this general rule, and an experiment is designed to test that hypothesis.",
     sections: [
@@ -572,6 +577,8 @@ export const exercisesEn: Exercise[] = [
         "E.g.: Trigger: 'My friend didn't reply to my message'. Thought: 'I don't matter to them'. Alternative: 'They're at work; they'll probably reply later'.",
     },
     title: "Thought record (Cognitive restructuring)",
+    outputs: [{ fieldId: "thoughts-description", kind: "thought" }],
+    next: ["cognitive-restructuring"],
     description:
       "When we adopt faulty thinking styles, it can be helpful to fill in a thought record and consider what kind of thinking is being triggered. Below is a list of faulty thinking styles: Self-blame: instead of seeing yourself as the victim, you believe you're responsible for the pain and happiness of everyone around you. Rigid thinking: we know we're right, but other people won't always agree. Personalization: believing that everything people say and do is somehow related to us. Blaming: other people, organizations, and the universe in general are to blame for our problems. Generalizing from the specific: drawing a general conclusion based on a single occurrence. Mind reading: we believe we 'know' what others think and why they act the way they do, even though they haven't told us. Magnification and filtering: we magnify negative emotions and filter out everything positive. Polarized thinking: we think of situations and people in all-or-nothing terms, e.g. good versus bad, pass versus fail. Catastrophizing: we expect the worst. Everything will go wrong and have the most significant impact. Work with the client to complete the following thought record and identify which thinking style is being applied.",
     sections: [
@@ -820,6 +827,8 @@ It's often harder to deal properly with challenges when we're already upset. Whe
         "E.g.: Event: 'My computer breaks before the deadline'. Probability: it happened to me once in 5 years. Best scenario: I fix it in 2 days; worst: I miss the deadline and recover it with an extension.",
     },
     title: "Challenging catastrophic thoughts",
+    outputs: [{ fieldId: "event-description", kind: "situation" }],
+    next: ["decatastrophizing"],
     description:
       "Believing the worst will always happen and magnifying its impact can be very harmful to your mental well-being. Work through the event by completing this exercise to understand the fear and find reassurance that the worst outcome isn't inevitable.",
     sections: [

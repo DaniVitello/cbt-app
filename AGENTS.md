@@ -27,30 +27,34 @@ Esto es una herramienta de registro personal. No reemplaza a un profesional
 ni da consejo clínico. Los datos que se escriben son sensibles (salud mental),
 así que la privacidad es una prioridad de diseño, no un detalle.
 
-### MVP (lado técnico)
+### El proyecto (lado técnico)
 
-- App web, 100% frontend por ahora, sin backend ni base de datos.
-- Stack: Vite + React + TypeScript + Tailwind CSS.
-- Persistencia local con localStorage (decisión consciente: los datos no
-  salen de mi computadora).
-- Son 15 ejercicios en PDF, pero comparten estructura. La idea central es un
-  MOTOR de ejercicios: los ejercicios se definen como DATOS y un único
-  componente genérico los renderiza. Agregar un ejercicio nuevo debería
-  implicar escribir datos, no UI.
+- App web: frontend Next.js 15 (App Router, Turbopack) + TypeScript estricto,
+  backend Fastify con base SQLite local (los datos no salen de la máquina).
+- Motor de ejercicios: los ejercicios se definen como DATOS (una definición
+  tipada por ejercicio) y un componente genérico los renderiza. Agregar un
+  ejercicio nuevo implica escribir datos, no UI.
+- Interfaz bilingüe desde el inicio (ES rioplatense + EN) con next-intl.
+- Accesibilidad WCAG 2.2 AA.
+- Son 15 ejercicios de una fuente original. El roadmap vive en
+  REQUIREMENTS.md (una serie de MVPs chicos).
 
 ### Fuera de alcance por ahora
 
-Backend, Docker, SQL, autenticación, RAG/LLM. No los propongas ni los agregues
-sin consultarme antes. Tampoco herramientas de pago: todo en free tier.
+Autenticación, Docker, RAG/LLM. No los propongas ni los agregues sin
+consultarme antes. Tampoco herramientas de pago: todo en free tier.
 
 ## 3. Arquitectura (decisiones ya tomadas)
 
 src/
-components/ UI reutilizable (TextField, RatingField, FieldRenderer, ExerciseForm)
-data/ ejercicios como objetos tipados
-hooks/ lógica reutilizable (useLocalStorage)
-pages/ pantallas completas
-types/ tipos (Field, Section, Exercise, Answers)
+app/[locale]/ páginas App Router (rutas localizadas /es, /en)
+components/ UI (exercise/, home/, ui/)
+data/ ejercicios como objetos tipados (exercises.es.ts / exercises.en.ts)
+hooks/ hooks reutilizables (useExercises)
+lib/ api del cliente, prefill, utils
+types/ tipos (Exercise, Answers, discriminated unions)
+messages/ traducciones ES/EN (next-intl)
+server/ backend Fastify + SQLite (rutas, migraciones)
 
 Principios:
 
@@ -60,27 +64,16 @@ Principios:
 - Estado inmutable (nunca mutar, siempre crear objetos nuevos).
 - Los `id` de los campos son un contrato: no se renombran a la ligera, porque
   las respuestas guardadas dependen de ellos.
-- Construir solo lo necesario para la fase actual.
+- Construir solo lo necesario para el slice actual.
 
-Tipos de campo en la Fase 1: `text`, `rating`, `rows`.
-Deuda de diseño conocida (todavía NO implementar): `choice`, bloques
-agrupados (Core Beliefs), contenido de solo lectura (PMR, intros largas).
+Los patrones concretos de UI y estructura los define la skill
+`frontend-architecture-and-ui`; el modelo de datos, `data-model-and-persistence`.
 
 ## 4. Metodología de trabajo (lo más importante)
 
-Trabajamos por fases, con checklist. No se avanza de fase hasta cumplir el
-checklist y poder explicar los conceptos.
-
-### Estado actual
-
-- Fase 0 (setup): COMPLETA.
-- Fase 1 (motor de ejercicios): EN CURSO.
-  Objetivo: tipos, 3 ejercicios (problem-solving, decatastrophizing,
-  rabbit-hole), ExerciseForm genérico, estado de respuestas.
-  Criterio de éxito: cambiar una línea en App.tsx alterna entre los 3
-  ejercicios sin tocar componentes.
-- Fases siguientes: 2 persistencia, 3 app completa (router, historial,
-  exportar), 4 ejercicios restantes y casos raros, 5 deploy.
+El ciclo de trabajo (auditar → backlog de slices → implementar → quality
+gates → proponer commit) está en la sección 6, "Skills del proyecto y cómo
+se usan".
 
 ### Cómo tenés que ayudarme
 
@@ -115,14 +108,52 @@ checklist y poder explicar los conceptos.
 - No agregues dependencias nuevas sin explicarme qué problema resuelven y
   por qué no alcanza lo que ya hay.
 
-## 5. Cómo empezar
+## 5. Cómo empezar y material de referencia
 
-Tu primera tarea: leé la estructura actual del proyecto y confirmame, con
-tus palabras, qué entendiste del objetivo, la arquitectura y las reglas de
-colaboración. Marcame cualquier cosa que te parezca ambigua o contradictoria.
-No escribas código todavía.
+- Empezá cada bloque de trabajo con el ciclo de la sección 6: auditoría con
+  `audit-and-migrate` y un slice del backlog aprobado. Sin backlog aprobado
+  no se escribe código.
+- `REQUIREMENTS.md`: roadmap de MVPs (fuente de verdad del alcance).
+- `docs/exercise-catalog.md`: objetivos centrales de cada uno de los 15
+  ejercicios, para interpretar bien cada uno.
+- `QA-REPORT.md`: informe de QA previo con hallazgos y estado.
 
-## 6. Aprender a promptear
+## 6. Skills del proyecto y cómo se usan
+
+Skills disponibles (carpeta de skills del proyecto):
+- `audit-and-migrate`: auditar la app y planificar slices.
+- `cbt-exercise-ux-interpreter`: PDF/transcripción → spec de UX por ejercicio.
+- `data-model-and-persistence`: datos, API, migraciones, privacidad.
+- `frontend-architecture-and-ui`: UI, motor de ejercicios, accesibilidad.
+- `quality-gates`: verificaciones antes de dar algo por terminado.
+
+### Ciclo obligatorio
+auditar → backlog de slices → por cada slice: spec (si falta) → implementar
+con la skill responsable → `quality-gates` → proponer commit → esperar mi OK.
+
+- Un slice = un commit chico, revisable, con la app funcionando.
+- Nombrá en voz alta qué skill vas a usar y leela antes de actuar.
+- No empieces un slice que no esté en el backlog aprobado.
+- Nada está "listo" sin pasar `quality-gates` y mostrar la evidencia.
+
+### Si dos reglas se contradicen, manda este orden
+1. Privacidad y seguridad de los datos.
+2. Accesibilidad.
+3. Experiencia de la persona (las specs de UX).
+4. Arquitectura y preferencias de código.
+
+### Modo aprendizaje (sigue vigente)
+En cada slice: explicame antes qué vas a hacer y por qué, mostrá alternativas
+si hay una decisión de diseño, y al cerrar hacé 1-2 preguntas de chequeo.
+Si algo de una skill me parece raro, lo discutimos y se corrige la skill, no
+solo el código.
+
+### Para trabajar mejor con contexto limitado
+- Leé solo lo necesario para el slice; no cargues el repo entero.
+- Si perdés el hilo, resumí el estado en 5 líneas y pedime confirmar.
+- Ante la duda sobre una API o versión, consultá la doc oficial.
+
+## 7. Aprender a promptear
 
 - Después de cada tarea, evaluá mi prompt en 3 líneas: qué estuvo claro,
   qué faltó (objetivo, alcance, límites, formato, criterio de listo) y

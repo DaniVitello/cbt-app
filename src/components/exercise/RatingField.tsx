@@ -21,6 +21,7 @@ export function RatingField({ field, value, onChange }: Props) {
           max={field.max}
           value={[value ?? field.min]}
           onValueChange={([v]) => onChange(v)}
+          thumbLabel={field.label}
           className="flex-1"
         />
         <span className="w-12 text-right font-mono text-sm">{value ?? field.min}</span>

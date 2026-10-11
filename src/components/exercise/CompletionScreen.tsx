@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import type { Exercise, Answers } from "@/types/exercise";
 import { useExercises } from "@/hooks/useExercises";
@@ -34,11 +35,19 @@ export function CompletionScreen({
   // Links de cadena deshabilitados hasta que la entry esté guardada, así
   // ?source= nunca se pierde por un click demasiado rápido.
   const waitingForSave = isSaving && sourceEntryId === null;
+  // Al montar, el botón "Finalizar" desaparece y el foco se caería al body:
+  // lo movemos al título para que lectores de pantalla/teclado naveguen desde ahí.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">{t("completionTitle")}</h1>
+        <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+          {t("completionTitle")}
+        </h1>
         <p className="mt-2 text-muted-foreground">{exercise.title}</p>
       </div>
 

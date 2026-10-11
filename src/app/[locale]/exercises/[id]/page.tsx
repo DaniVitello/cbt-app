@@ -235,7 +235,7 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
           <span className="text-muted-foreground">{t("saving")}</span>
         )}
         {saveStatus === "saved" && (
-          <span className="text-green-600">{t("saved")}</span>
+          <span className="text-green-700 dark:text-green-600">{t("saved")}</span>
         )}
         {saveStatus === "error" && (
           <span className="text-red-600">{t("saveError")}</span>

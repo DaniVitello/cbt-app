@@ -92,7 +92,7 @@ export function ExerciseWizard({
           currentStep={currentStep}
           onStepClick={handleStepClick}
         />
-        <ProgressBar value={currentStep + 1} max={totalSteps} />
+        <ProgressBar value={currentStep + 1} max={totalSteps} label={t("progressNav")} />
       </div>
 
       {/* Measure Before (first step) */}
@@ -107,6 +107,7 @@ export function ExerciseWizard({
               max={exercise.measure.max}
               value={[measureBefore ?? exercise.measure.min]}
               onValueChange={([v]) => setMeasureBefore(v)}
+              thumbLabel={exercise.measure.labelBefore}
             />
             <p className="mt-2 text-sm text-muted-foreground">
               {measureBefore ?? exercise.measure.min}
@@ -127,6 +128,7 @@ export function ExerciseWizard({
               max={exercise.measure.max}
               value={[measureAfter ?? exercise.measure.min]}
               onValueChange={([v]) => setMeasureAfter(v)}
+              thumbLabel={exercise.measure.labelAfter}
             />
             <p className="mt-2 text-sm text-muted-foreground">
               {measureAfter ?? exercise.measure.min}

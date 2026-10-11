@@ -7,9 +7,11 @@ interface ProgressBarProps {
   max?: number;
   className?: string;
   showLabel?: boolean;
+  /** Nombre accesible del progressbar (role="progressbar" sin nombre es un fallo AA). */
+  label?: string;
 }
 
-export function ProgressBar({ value, max = 100, className, showLabel }: ProgressBarProps) {
+export function ProgressBar({ value, max = 100, className, showLabel, label }: ProgressBarProps) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
   return (
@@ -19,6 +21,7 @@ export function ProgressBar({ value, max = 100, className, showLabel }: Progress
       )}
       <div
         role="progressbar"
+        aria-label={label}
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={max}

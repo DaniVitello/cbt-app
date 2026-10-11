@@ -26,6 +26,7 @@ export function Stepper({ steps, currentStep, onStepClick, className }: StepperP
               onClick={() => onStepClick?.(index)}
               disabled={!onStepClick}
               aria-current={isCurrent ? "step" : undefined}
+              aria-label={`${isCompleted ? "✓ " : ""}${index + 1}. ${step}`}
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors",
                 isCompleted && "bg-primary text-primary-foreground",

@@ -1,24 +1,24 @@
 import { FastifyInstance } from "fastify";
 import { randomUUID } from "crypto";
 import db from "../db.js";
-import { entrySchema, entryUpdateSchema } from "../schema.js";
+import { entrySchema, entryUpdateSchema, entriesQuerySchema } from "../schema.js";
 
 export async function entryRoutes(app: FastifyInstance) {
   app.get("/api/health", async () => {
     return { status: "ok" };
   });
 
-  app.get("/api/entries", async (request) => {
-    const { exercise_id, theme_id, status, limit, offset } = request.query as {
-      exercise_id?: string;
-      theme_id?: string;
-      status?: string;
-      limit?: string;
-      offset?: string;
-    };
-
-    const limitNum = Math.min(parseInt(limit ?? "20", 10), 100);
-    const offsetNum = parseInt(offset ?? "0", 10);
+  app.get("/api/entries", async (request, reply) => {
+    const parsed = entriesQuerySchema.safeParse(request.query);
+    if (!parsed.success) {
+      return reply.status(400).send({
+        error: {
+          message: "Validation failed",
+          details: parsed.error.flatten(),
+        },
+      });
+    }
+    const { exercise_id, theme_id, status, limit, offset } = parsed.data;
 
     let query = "SELECT * FROM entries WHERE 1=1";
     const params: unknown[] = [];
@@ -37,7 +37,7 @@ export async function entryRoutes(app: FastifyInstance) {
     }
 
     query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
-    params.push(limitNum, offsetNum);
+    params.push(limit, offset);
 
     const entries = db.prepare(query).all(...params);
     return entries.map(parseEntry);

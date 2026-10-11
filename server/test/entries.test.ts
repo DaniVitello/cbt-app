@@ -70,6 +70,14 @@ describe("entries", () => {
     expect(missing.json().error.message).toBe("Entry not found");
   });
 
+  it("GET con query inválida da 400 con el formato de error estándar", async () => {
+    for (const qs of ["limit=abc", "offset=abc", "limit=0", "limit=-5", "limit=500", "offset=-1", "limit=2.5", "status=nope"]) {
+      const res = await app.inject({ method: "GET", url: `/api/entries?${qs}` });
+      expect(res.statusCode).toBe(400);
+      expect(res.json().error.message).toBe("Validation failed");
+    }
+  });
+
   it("GET lista con filtros exercise_id / status y paginación", async () => {
     await app.inject({
       method: "POST",

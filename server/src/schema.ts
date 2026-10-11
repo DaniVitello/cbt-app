@@ -13,6 +13,16 @@ export const entrySchema = z.object({
 
 export const entryUpdateSchema = entrySchema.partial();
 
+export const entriesQuerySchema = z.object({
+  exercise_id: z.string().min(1).optional(),
+  theme_id: z.string().min(1).optional(),
+  status: z.enum(["draft", "completed"]).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  offset: z.coerce.number().int().min(0).default(0),
+});
+
+export type EntriesQuery = z.infer<typeof entriesQuerySchema>;
+
 export const themeSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),

@@ -147,6 +147,34 @@ describe("entries", () => {
     expect(survivor.json().source_entry_id).toBeNull();
   });
 
+  it("GET /api/entries/export devuelve todo (themes + entries con answers parseadas)", async () => {
+    const theme = await app.inject({
+      method: "POST",
+      url: "/api/themes",
+      payload: { title: "Tema export" },
+    });
+    const themeId = theme.json().id;
+    await app.inject({
+      method: "POST",
+      url: "/api/entries",
+      payload: { exercise_id: "pmr", answers: { paso: "respirar" }, theme_id: themeId },
+    });
+
+    const res = await app.inject({ method: "GET", url: "/api/entries/export" });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.schemaVersion).toBe(1);
+    expect(new Date(body.exportedAt).toString()).not.toBe("Invalid Date");
+    expect(body.themes.some((t: { id: string }) => t.id === themeId)).toBe(true);
+    const exported = body.entries.find(
+      (e: { answers: unknown }) => JSON.stringify(e.answers).includes("respirar"),
+    );
+    expect(exported).toBeDefined();
+    // answers viene parseado como objeto, no como string JSON.
+    expect(exported.answers).toEqual({ paso: "respirar" });
+    expect(exported.theme_id).toBe(themeId);
+  });
+
   it("DELETE borra (204) y después es 404", async () => {
     const created = await app.inject({ method: "POST", url: "/api/entries", payload: baseEntry });
     const id = created.json().id;

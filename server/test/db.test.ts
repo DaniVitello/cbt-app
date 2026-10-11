@@ -1,5 +1,5 @@
 import { describe, it, expect, afterAll } from "vitest";
-import type { Database } from "better-sqlite3";
+import Database from "better-sqlite3";
 import { makeTempDbPath } from "./helpers.js";
 
 // El singleton se crea como efecto del import: fijar CBT_DB_PATH ANTES
@@ -91,8 +91,7 @@ describe("migraciones", () => {
     try {
       // Legacy real: tablas originales, sin columnas nuevas y sin versión
       // sellada (el código anterior a las migraciones no usaba user_version).
-      const { default: SQLite } = await import("better-sqlite3");
-      legacy = new SQLite(path);
+            legacy = new Database(path);
       legacy.exec(`
         CREATE TABLE entries (
           id TEXT PRIMARY KEY, exercise_id TEXT NOT NULL,
@@ -141,8 +140,7 @@ describe("migraciones", () => {
     try {
       // Base "del código viejo": tablas + columnas nuevas pero versión 0
       // (el código anterior no sellaba user_version) y refs a filas inexistentes.
-      const { default: SQLite } = await import("better-sqlite3");
-      raw = new SQLite(path);
+            raw = new Database(path);
       raw.exec(`
         CREATE TABLE entries (
           id TEXT PRIMARY KEY, exercise_id TEXT NOT NULL,

@@ -86,6 +86,20 @@ export async function entryRoutes(app: FastifyInstance) {
     return reply.status(201).send(parseEntry(entry));
   });
 
+  app.get("/api/entries/export", async () => {
+    // Backup total en el formato versionado que el futuro import entiende:
+    // { schemaVersion, exportedAt, themes, entries }. Ruta estática: Fastify
+    // la prioriza sobre /api/entries/:id aunque se registre después.
+    const entries = db.prepare("SELECT * FROM entries ORDER BY created_at DESC").all();
+    const themes = db.prepare("SELECT * FROM themes ORDER BY created_at DESC").all();
+    return {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      themes,
+      entries: entries.map(parseEntry),
+    };
+  });
+
   app.get("/api/entries/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     const entry = db.prepare("SELECT * FROM entries WHERE id = ?").get(id);

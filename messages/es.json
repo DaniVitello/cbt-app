@@ -73,7 +73,9 @@
     "loadMore": "Cargar más",
     "deleteConfirm": "¿Estás seguro de que querés borrar esta entrada?",
     "errorTitle": "Error al cargar",
-    "errorDescription": "No se pudieron cargar las entradas. Intentá de nuevo."
+    "errorDescription": "No se pudieron cargar las entradas. Intentá de nuevo.",
+    "exportAll": "Exportar todo",
+    "exportError": "No se pudo exportar. Intentá de nuevo."
   },
   "theme": {
     "notFound": "Tema no encontrado.",

@@ -244,3 +244,30 @@ export async function getThemeEntries(themeId: string): Promise<Entry[]> {
   const data: RawEntry[] = await res.json();
   return data.map(mapEntry);
 }
+
+/* --------------------------- Export completo ----------------------------- */
+
+export interface FullExport {
+  schemaVersion: number;
+  exportedAt: string;
+  themes: Theme[];
+  entries: Entry[];
+}
+
+/** Backup total: todo lo que hay (mismo formato que el futuro import entiende). */
+export async function exportAll(): Promise<FullExport> {
+  const res = await fetch(`${API_URL}/entries/export`);
+  if (!res.ok) throw new Error("Failed to export data");
+  const raw: {
+    schemaVersion: number;
+    exportedAt: string;
+    themes: RawTheme[];
+    entries: RawEntry[];
+  } = await res.json();
+  return {
+    schemaVersion: raw.schemaVersion,
+    exportedAt: raw.exportedAt,
+    themes: raw.themes.map(mapTheme),
+    entries: raw.entries.map(mapEntry),
+  };
+}

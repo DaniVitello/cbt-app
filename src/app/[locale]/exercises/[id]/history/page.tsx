@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { getEntries, deleteEntry, type Entry } from "@/lib/api";
+import { getEntries, deleteEntry, exportAll, type Entry } from "@/lib/api";
+import { buildExportFilename, downloadJson } from "@/lib/download";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -19,6 +20,8 @@ export default function HistoryPage() {
   const t = useTranslations("history");
   const tc = useTranslations("common");
   const [offset, setOffset] = useState(0);
+  const [exportError, setExportError] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: entries, isLoading, error } = useQuery({
     queryKey: ["entries", params.id, offset],
@@ -40,15 +43,20 @@ export default function HistoryPage() {
   };
 
   const handleExport = (entry: Entry) => {
-    const blob = new Blob([JSON.stringify(entry, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `entry-${entry.id}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadJson(`entry-${entry.id}.json`, entry);
+  };
+
+  const handleExportAll = async () => {
+    setExportError(false);
+    setIsExporting(true);
+    try {
+      const data = await exportAll();
+      downloadJson(buildExportFilename(), data);
+    } catch {
+      setExportError(true);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (isLoading) {
@@ -89,7 +97,17 @@ export default function HistoryPage() {
         </Button>
       </Link>
 
-      <h1 className="mb-6 text-2xl font-bold">{t("title")}</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <Button variant="outline" size="sm" onClick={handleExportAll} disabled={isExporting}>
+          {isExporting ? `${tc("export")}…` : t("exportAll")}
+        </Button>
+      </div>
+      {exportError && (
+        <p role="alert" className="mb-4 text-sm text-red-600">
+          {t("exportError")}
+        </p>
+      )}
 
       {entryList.length === 0 ? (
         <EmptyState

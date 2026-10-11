@@ -61,7 +61,15 @@
     "nextSuggested": "Suggested next step",
     "prefilled": "We prefilled some fields with the answer from your previous exercise. You can edit anything.",
     "backToHome": "Back to home",
-    "notFound": "Exercise not found."
+    "notFound": "Exercise not found.",
+    "redoButton": "Start over",
+    "redoTitle": "Start this exercise over?",
+    "redoKeep": "Keep the previous attempt and start",
+    "redoKeepDesc": "Your previous attempt stays saved in history. You start blank.",
+    "redoDelete": "Delete the previous attempt and start",
+    "redoDeleteDesc": "Your previous attempt is deleted forever. We recommend exporting it first from history.",
+    "redoConfirm": "Confirm",
+    "redoError": "Could not start over. Please try again."
   },
   "history": {
     "title": "History",

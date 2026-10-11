@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, usePathname } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useTranslations } from "next-intl";
@@ -8,7 +8,8 @@ import { Link, useRouter } from "@/i18n/routing";
 import { useExercises } from "@/hooks/useExercises";
 import { ExerciseWizard } from "@/components/exercise/ExerciseWizard";
 import { CompletionScreen } from "@/components/exercise/CompletionScreen";
-import { getEntries, getEntry, createEntry, updateEntry } from "@/lib/api";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { getEntries, getEntry, createEntry, updateEntry, deleteEntry } from "@/lib/api";
 import { getPrefill } from "@/lib/prefill";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ function ExerciseShell() {
       key={params.id}
       exerciseId={params.id}
       sourceId={searchParams.get("source")}
+      fresh={searchParams.get("fresh") === "1"}
     />
   );
 }
@@ -46,9 +48,14 @@ function ExerciseShell() {
 type RootProps = {
   exerciseId: string;
   sourceId: string | null;
+  fresh: boolean;
 };
 
-function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
+function ExerciseRoot({ exerciseId, sourceId, fresh }: RootProps) {
+  const pathname = usePathname();
+  // usePathname trae el locale (/es/...) pero el router i18n lo prefija
+  // solo: se opera sin locale (igual que los <Link href="/exercises/...">).
+  const basePath = pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
   const exercises = useExercises();
   const exercise = exercises.find((e) => e.id === exerciseId);
   const queryClient = useQueryClient();
@@ -62,6 +69,16 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   // Se completó en ESTA sesión (el wizard muestra su propio cierre).
   // Distinto de "ya estaba completada al entrar" (solo lectura, D2).
   const [completedInSession, setCompletedInSession] = useState(false);
+  const [redoOpen, setRedoOpen] = useState(false);
+  const [redoChoice, setRedoChoice] = useState<"keep" | "delete">("keep");
+  const [redoError, setRedoError] = useState(false);
+  // Id de la instancia creada en un flujo ?fresh=1: los guardados siguientes
+  // van a ESTA entry por id (no a entries[0], que podría ser la anterior).
+  const [freshEntryId, setFreshEntryId] = useState<string | null>(null);
+  // El flag ?fresh=1 se limpia de la URL tras inicializar; este estado
+  // recuerda que el flujo fresco sigue en curso (si no, readOnly volvería
+  // a true por la entry anterior y el wizard desaparecería).
+  const [freshActive, setFreshActive] = useState(false);
   const debouncedAnswers = useDebounce(answers, 500);
 
   // Evita el doble PUT (la invalidación de queries re- disparaba el effect)
@@ -92,7 +109,8 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   // D2: reabrir una entry ya completada = vista de solo lectura. No pisa
   // respuestas, no revierte a draft. Completar en esta sesión sigue el
   // flujo normal del wizard (completedInSession).
-  const readOnly = existingEntry?.status === "completed" && !completedInSession;
+  const readOnly =
+    existingEntry?.status === "completed" && !completedInSession && !fresh && !freshActive;
 
   // Inicialización una sola vez, en fase de render (patrón "derivar estado
   // al renderizar" de React): entry existente > prefill desde ?source > vacío.
@@ -100,8 +118,9 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   // después, y no hay renders en cascada. En solo lectura no hay nada que
   // inicializar (no hay formulario editable).
   if (!initialized && entries !== undefined && !sourcePending && !readOnly) {
-    if (entries.length > 0) {
+    if (entries.length > 0 && !fresh) {
       // Ya hay un intento de este ejercicio: retomarlo, sin pisarlo con prefill.
+      // (Con ?fresh=1 se ignora a propósito: es una instancia nueva.)
       setAnswers(entries[0].answers);
     } else if (sourceId && sourceEntry && exercise) {
       const sourceExercise = exercises.find((e) => e.id === sourceEntry.exerciseId);
@@ -113,12 +132,29 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
         setPrefilled(true);
       }
     }
+    if (fresh) {
+      setFreshActive(true);
+    }
     setInitialized(true);
   }
 
+  // El flag ?fresh=1 vale para una sola inicialización: se limpia de la URL
+  // para que un refresh no ignore el borrador en curso y lo huérfane.
+  useEffect(() => {
+    if (initialized && fresh) {
+      router.replace(sourceId ? `${basePath}?source=${sourceId}` : basePath);
+    }
+  }, [initialized, fresh, sourceId, basePath, router]);
+
   const saveMutation = useMutation({
     mutationFn: async () => {
-      if (entries && entries.length > 0) {
+      if (freshEntryId) {
+        return updateEntry(freshEntryId, {
+          answers: debouncedAnswers,
+          status: "draft",
+        });
+      }
+      if (entries && entries.length > 0 && !fresh && !freshActive) {
         return updateEntry(entries[0].id, {
           answers: debouncedAnswers,
           status: "draft",
@@ -131,8 +167,13 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
         sourceEntryId: sourceId,
       });
     },
-    onSuccess: () => {
+    onSuccess: (entry) => {
       setSaveStatus("saved");
+      // Flujo ?fresh=1: el POST crea la instancia nueva; los guardados
+      // siguientes la referencian por id (ver freshEntryId).
+      if ((fresh || freshActive) && !freshEntryId && entry) {
+        setFreshEntryId(entry.id);
+      }
       queryClient.invalidateQueries({ queryKey: ["entries", exerciseId] });
     },
     onError: () => {
@@ -168,15 +209,16 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
     mutationFn: async (measures: Measures) => {
       // Esperamos cualquier autoguardado en vuelo para no duplicar la entry.
       await savePromiseRef.current;
-      const fresh = await getEntries({ exerciseId, limit: 1 });
+      const targetId =
+        freshEntryId ?? (await getEntries({ exerciseId, limit: 1 }))[0]?.id ?? null;
       const payload = {
         answers,
         status: "completed" as const,
         measureBefore: measures.before,
         measureAfter: measures.after,
       };
-      if (fresh.length > 0) {
-        return updateEntry(fresh[0].id, payload);
+      if (targetId) {
+        return updateEntry(targetId, payload);
       }
       return createEntry({
         exerciseId,
@@ -207,6 +249,27 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
 
   const handleBackToHome = () => {
     router.push("/");
+  };
+
+  const handleRedoDelete = async () => {
+    if (!existingEntry) return;
+    setRedoError(false);
+    try {
+      await deleteEntry(existingEntry.id);
+      setRedoOpen(false);
+      setRedoChoice("keep");
+      queryClient.invalidateQueries({ queryKey: ["entries", exerciseId] });
+    } catch {
+      setRedoError(true);
+    }
+  };
+
+  const handleRedoKeep = () => {
+    setRedoOpen(false);
+    setRedoChoice("keep");
+    router.push(
+      sourceId ? `${basePath}?fresh=1&source=${sourceId}` : `${basePath}?fresh=1`,
+    );
   };
 
   if (!exercise) {
@@ -256,15 +319,69 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
       </div>
 
       {readOnly && existingEntry ? (
-        <CompletionScreen
-          exercise={exercise}
-          answers={existingEntry.answers}
-          measureBefore={existingEntry.measures.before ?? null}
-          measureAfter={existingEntry.measures.after ?? null}
-          onBackToHome={handleBackToHome}
-          sourceEntryId={existingEntry.id}
-          isSaving={false}
-        />
+        <>
+          <CompletionScreen
+            exercise={exercise}
+            answers={existingEntry.answers}
+            measureBefore={existingEntry.measures.before ?? null}
+            measureAfter={existingEntry.measures.after ?? null}
+            onBackToHome={handleBackToHome}
+            sourceEntryId={existingEntry.id}
+            isSaving={false}
+          />
+
+          <div className="mt-6 text-center">
+            <Button variant="outline" onClick={() => setRedoOpen(true)}>
+              {t("redoButton")}
+            </Button>
+          </div>
+
+          <Dialog open={redoOpen} onOpenChange={setRedoOpen}>
+            <DialogContent>
+              <DialogTitle>{t("redoTitle")}</DialogTitle>
+              <DialogDescription className="mt-1">
+                {redoChoice === "keep" ? t("redoKeepDesc") : t("redoDeleteDesc")}
+              </DialogDescription>
+              <div className="mt-4 flex flex-col gap-3" role="radiogroup" aria-label={t("redoTitle")}>
+                <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-3">
+                  <input
+                    type="radio"
+                    name="redo-choice"
+                    checked={redoChoice === "keep"}
+                    onChange={() => setRedoChoice("keep")}
+                    className="mt-1"
+                  />
+                  <span className="text-sm font-medium">{t("redoKeep")}</span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-3">
+                  <input
+                    type="radio"
+                    name="redo-choice"
+                    checked={redoChoice === "delete"}
+                    onChange={() => setRedoChoice("delete")}
+                    className="mt-1"
+                  />
+                  <span className="text-sm font-medium">{t("redoDelete")}</span>
+                </label>
+              </div>
+              {redoError && (
+                <p role="alert" className="mt-3 text-sm text-red-600">
+                  {t("redoError")}
+                </p>
+              )}
+              <div className="mt-6 flex justify-end gap-2">
+                <Button variant="ghost" onClick={() => setRedoOpen(false)}>
+                  {tc("cancel")}
+                </Button>
+                <Button
+                  onClick={() => (redoChoice === "keep" ? handleRedoKeep() : handleRedoDelete())}
+                >
+                  {t("redoConfirm")}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </>
       ) : (
         <>
           {prefilled && (

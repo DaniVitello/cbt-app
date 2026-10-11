@@ -95,7 +95,7 @@ export async function themeRoutes(app: FastifyInstance) {
     return reply.status(204).send();
   });
 
-  app.get("/api/themes/:id/entries", async (request, reply) => {
+  app.get("/api/themes/:id/entries", async (request) => {
     const { id } = request.params as { id: string };
     const entries = db
       .prepare("SELECT * FROM entries WHERE theme_id = ? ORDER BY created_at DESC")
@@ -105,9 +105,28 @@ export async function themeRoutes(app: FastifyInstance) {
   });
 }
 
-function parseEntry(entry: any) {
+/** Fila cruda de la tabla entries (answers viaja como TEXT JSON). */
+interface EntryRow {
+  id: string;
+  exercise_id: string;
+  answers: string;
+  status: string;
+  exercise_version: number;
+  theme_id: string | null;
+  source_entry_id: string | null;
+  measure_before: number | null;
+  measure_after: number | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+function parseEntry(entry: unknown) {
+  // Borde DB→API: la fila la escribimos nosotros con este esquema; el cast
+  // vive solo acá en vez de un `any` desparramado.
+  const row = entry as EntryRow;
   return {
-    ...entry,
-    answers: JSON.parse(entry.answers),
+    ...row,
+    answers: JSON.parse(row.answers) as Record<string, unknown>,
   };
 }

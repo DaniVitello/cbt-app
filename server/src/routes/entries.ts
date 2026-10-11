@@ -21,7 +21,7 @@ export async function entryRoutes(app: FastifyInstance) {
     const offsetNum = parseInt(offset ?? "0", 10);
 
     let query = "SELECT * FROM entries WHERE 1=1";
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (exercise_id) {
       query += " AND exercise_id = ?";
@@ -189,9 +189,28 @@ export async function entryRoutes(app: FastifyInstance) {
   });
 }
 
-function parseEntry(entry: any) {
+/** Fila cruda de la tabla entries (answers viaja como TEXT JSON). */
+interface EntryRow {
+  id: string;
+  exercise_id: string;
+  answers: string;
+  status: string;
+  exercise_version: number;
+  theme_id: string | null;
+  source_entry_id: string | null;
+  measure_before: number | null;
+  measure_after: number | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+function parseEntry(entry: unknown) {
+  // Borde DB→API: la fila la escribimos nosotros con este esquema; el cast
+  // vive solo acá en vez de un `any` desparramado.
+  const row = entry as EntryRow;
   return {
-    ...entry,
-    answers: JSON.parse(entry.answers),
+    ...row,
+    answers: JSON.parse(row.answers) as Record<string, unknown>,
   };
 }

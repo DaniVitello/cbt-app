@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Stepper } from "@/components/ui/stepper";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Props = {

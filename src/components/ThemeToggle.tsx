@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { Moon, Sun, Monitor } from "lucide-react";
@@ -14,12 +14,22 @@ const NEXT_THEME: Record<ThemeName, ThemeName> = {
   system: "light",
 };
 
+/**
+ * Verdadero solo en el cliente (patrón isomorphic sin effects: el servidor
+ * siempre ve `false`, así no hay mismatch de hidratación).
+ */
+function useMounted(): boolean {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function ThemeToggle() {
   const t = useTranslations("common");
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
 
   // Evita mismatch de hidratación: next-themes solo sabe el tema en el cliente.
   if (!mounted) {

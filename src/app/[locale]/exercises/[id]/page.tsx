@@ -66,7 +66,7 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   const lastSavedRef = useRef<Record<string, unknown> | null>(null);
   const savePromiseRef = useRef<Promise<unknown> | null>(null);
   // La inicialización (entry existente o prefill) ocurre una sola vez.
-  const initializedRef = useRef(false);
+  const [initialized, setInitialized] = useState(false);
 
   const { data: entries, isLoading } = useQuery({
     queryKey: ["entries", exerciseId],
@@ -84,16 +84,15 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
   const sourcePending =
     sourceId !== null && sourceEntry === undefined && !sourceError;
 
-  // Inicialización: entry existente > prefill desde ?source > vacío.
-  useEffect(() => {
-    if (initializedRef.current || entries === undefined || sourcePending) return;
+  // Inicialización una sola vez, en fase de render (patrón "derivar estado
+  // al renderizar" de React): entry existente > prefill desde ?source > vacío.
+  // Sin effect con setState: el formulario nunca pinta vacío para rellenarse
+  // después, y no hay renders en cascada.
+  if (!initialized && entries !== undefined && !sourcePending) {
     if (entries.length > 0) {
       // Ya hay un intento de este ejercicio: retomarlo, sin pisarlo con prefill.
       setAnswers(entries[0].answers);
-      initializedRef.current = true;
-      return;
-    }
-    if (sourceId && sourceEntry && exercise) {
+    } else if (sourceId && sourceEntry && exercise) {
       const sourceExercise = exercises.find((e) => e.id === sourceEntry.exerciseId);
       const prefill = sourceExercise
         ? getPrefill(sourceExercise, exercise, sourceEntry.answers)
@@ -103,8 +102,8 @@ function ExerciseRoot({ exerciseId, sourceId }: RootProps) {
         setPrefilled(true);
       }
     }
-    initializedRef.current = true;
-  }, [entries, sourceEntry, sourcePending, sourceId, exercise]);
+    setInitialized(true);
+  }
 
   const saveMutation = useMutation({
     mutationFn: async () => {

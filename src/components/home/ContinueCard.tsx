@@ -51,11 +51,9 @@ export function ContinueCard({ drafts, isLoading }: ContinueCardProps) {
               <p className="mb-2 text-sm text-muted-foreground">
                 {new Date(draft.updatedAt).toLocaleString(locale)}
               </p>
-              <Link href={`/exercises/${draft.exerciseId}`}>
-                <Button variant="outline" size="sm">
-                  {t("continueWhereLeft")}
-                </Button>
-              </Link>
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/exercises/${draft.exerciseId}`}>{t("continueWhereLeft")}</Link>
+              </Button>
             </CardContent>
           </Card>
         ))}

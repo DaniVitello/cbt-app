@@ -21,6 +21,9 @@ export default defineConfig([
     "**/dist/",
     "server/data/",
     "next-env.d.ts",
+    "test-results/",
+    "playwright-report/",
+    "blob-report/",
   ]),
 
   // Base: JS recomendado + TypeScript recomendado (sin type-checking).

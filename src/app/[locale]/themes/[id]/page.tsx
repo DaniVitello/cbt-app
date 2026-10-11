@@ -40,20 +40,18 @@ export default function ThemePage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-muted-foreground">{tt("notFound")}</p>
-        <Link href="/">
-          <Button variant="link">{tt("backToHome")}</Button>
-        </Link>
+        <Button variant="link" asChild>
+          <Link href="/">{tt("backToHome")}</Link>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <Link href="/">
-        <Button variant="link" className="mb-6 p-0">
-          ← {tt("backToHome")}
-        </Button>
-      </Link>
+      <Button variant="link" className="mb-6 p-0" asChild>
+        <Link href="/">← {tt("backToHome")}</Link>
+      </Button>
 
       <div className="mb-6">
         <h1 className="text-2xl font-bold">{theme.title}</h1>

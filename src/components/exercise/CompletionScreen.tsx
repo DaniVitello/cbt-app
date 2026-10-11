@@ -30,7 +30,6 @@ export function CompletionScreen({
   isSaving,
 }: Props) {
   const t = useTranslations("exercise");
-  const tc = useTranslations("common");
   const exercises = useExercises();
   // Links de cadena deshabilitados hasta que la entry esté guardada, así
   // ?source= nunca se pierde por un click demasiado rápido.
@@ -104,24 +103,24 @@ export function CompletionScreen({
                         {title}
                       </Button>
                       <span className="text-sm text-muted-foreground">
-                        {tc("saving")}
+                        {t("saving")}
                       </span>
                     </li>
                   );
                 }
                 return (
                   <li key={nextId}>
-                    <Link
-                      href={
-                        sourceEntryId
-                          ? `/exercises/${nextId}?source=${sourceEntryId}`
-                          : `/exercises/${nextId}`
-                      }
-                    >
-                      <Button variant="link" className="p-0">
+                    <Button variant="link" className="p-0" asChild>
+                      <Link
+                        href={
+                          sourceEntryId
+                            ? `/exercises/${nextId}?source=${sourceEntryId}`
+                            : `/exercises/${nextId}`
+                        }
+                      >
                         {title}
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   </li>
                 );
               })}

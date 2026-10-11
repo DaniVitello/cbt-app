@@ -294,16 +294,12 @@ function ExerciseRoot({ exerciseId, sourceId, fresh }: RootProps) {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
-        <Link href="/">
-          <Button variant="link" className="p-0">
-            ← {t("backToList")}
-          </Button>
-        </Link>
-        <Link href={`/exercises/${exerciseId}/history`}>
-          <Button variant="link" className="p-0">
-            {t("history")}
-          </Button>
-        </Link>
+        <Button variant="link" className="p-0" asChild>
+          <Link href="/">← {t("backToList")}</Link>
+        </Button>
+        <Button variant="link" className="p-0" asChild>
+          <Link href={`/exercises/${exerciseId}/history`}>{t("history")}</Link>
+        </Button>
       </div>
 
       <div aria-live="polite" className="mb-4 h-5 text-sm">
@@ -397,7 +393,10 @@ function ExerciseRoot({ exerciseId, sourceId, fresh }: RootProps) {
             onComplete={handleComplete}
             onBackToHome={handleBackToHome}
             completedEntryId={completedEntryId}
-            isSaving={saveStatus === "saving"}
+            // El gate del link (?source=) debe seguir cerrado mientras el
+            // completado está en vuelo, aunque el autoguardado ya haya
+            // resuelto (si no, se muestra un link sin source en el medio).
+            isSaving={saveStatus === "saving" || completeMutation.isPending}
           />
         </>
       )}

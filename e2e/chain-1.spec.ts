@@ -13,7 +13,10 @@ test("cadena 1 completa con prefill, gate y persistencia", async ({ page }) => {
 
   // Ralentizar los guardados para observar el gate: el link al siguiente
   // ejercicio debe estar deshabilitado MIENTRAS guarda.
-  await page.route("**/api/entries/**", async (route) => {
+  // El glob necesita matchear CON y SIN slash: POST /api/entries y los GET
+  // con query no tienen slash tras "entries" (solo PUT/GET-por-id lo tienen).
+  // Con "**/api/entries/**" el delay no se aplicaba y el gate era suerte.
+  await page.route("**/api/entries*", async (route) => {
     if (route.request().method() === "PUT" || route.request().method() === "POST") {
       await new Promise((r) => setTimeout(r, 2000));
     }
@@ -72,8 +75,26 @@ test("cadena 1 completa con prefill, gate y persistencia", async ({ page }) => {
   await expect(page.getByText("¡Ejercicio completado!")).toBeVisible();
 
   // --- Persistencia: la cadena quedó linkeada en la API ---
+  // OJO: la pantalla muestra el cierre ANTES de que el PUT resuelva
+  // (visible ≠ persistido). Se espera por los 3 completados, no por tiempo.
   const api = await baseRequest.newContext({ baseURL: "http://localhost:3001" });
   try {
+    const IDS = ["downward-arrow", "core-beliefs-suitcases", "disputing-irrational-beliefs"] as const;
+    await expect
+      .poll(
+        async () => {
+          const out: Array<string | null> = [];
+          for (const ex of IDS) {
+            const res = await api.get(`/api/entries?exercise_id=${ex}`);
+            const [e] = (await res.json()) as Array<{ status: string }>;
+            out.push(e?.status ?? null);
+          }
+          return out;
+        },
+        { timeout: 30_000 },
+      )
+      .toEqual(["completed", "completed", "completed"]);
+
     const list = async (exerciseId: string) => {
       const res = await api.get(`/api/entries?exercise_id=${exerciseId}`);
       expect(res.ok()).toBe(true);

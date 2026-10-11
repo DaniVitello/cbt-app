@@ -91,11 +91,9 @@ export default function HistoryPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <Link href={`/exercises/${params.id}`}>
-        <Button variant="link" className="mb-6 p-0">
-          ← {t("backToExercise")}
-        </Button>
-      </Link>
+      <Button variant="link" className="mb-6 p-0" asChild>
+        <Link href={`/exercises/${params.id}`}>← {t("backToExercise")}</Link>
+      </Button>
 
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("title")}</h1>

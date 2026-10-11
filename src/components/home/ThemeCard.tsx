@@ -46,11 +46,9 @@ export function ThemeCard({ themes, isLoading }: ThemeCardProps) {
               <p className="mb-2 text-sm text-muted-foreground">
                 {tt(`status.${theme.status}`)}
               </p>
-              <Link href={`/themes/${theme.id}`}>
-                <Button variant="outline" size="sm">
-                  {t("activeThemes")}
-                </Button>
-              </Link>
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/themes/${theme.id}`}>{t("activeThemes")}</Link>
+              </Button>
             </CardContent>
           </Card>
         ))}

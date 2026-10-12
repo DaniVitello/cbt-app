@@ -30,3 +30,6 @@ tsconfig.tsbuildinfo
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# python (skill scripts)
+__pycache__/

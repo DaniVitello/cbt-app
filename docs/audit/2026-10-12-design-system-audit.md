@@ -58,8 +58,8 @@ Faltan del roadmap: Tabs, Badge, BottomNav (shell MVP 3), CrisisBanner (shell MV
 ## Decisiones que necesitan al humano
 
 - **D1 — Dirección de paleta:** RESUELTA por el dueño (2026-10-12): cálida, sin colores eléctricos, tonos pastel, consistencia y calma durante los ejercicios. Restricción dura para DS-1 (el brief a la skill debe excluir neones/eléctricos).
-- **D2 — Toast:** ¿lo cableamos (¿dónde? ¿export/errores?) o se borra? Recomiendo cablearlo mínimo en exportar/borrar si el flujo lo pide, si no borrar (código muerto con dueño).
-- **D3 — Tipografía:** ¿seguir con Inter o evaluar parejas de la skill? Recomiendo Inter salvo que el MASTER traiga un argumento fuerte (ya carga, es legible, cubre ES).
+- **D2 — Toast:** RESUELTA por el dueño (2026-10-12): cablear solo si la lógica lo pide → ningún flujo actual lo necesita (feedback inline existente) → **se borra** `ui/toast.tsx`. Se reintroduce si un MVP futuro trae el caso.
+- **D3 — Tipografía:** RESUELTA por el dueño (2026-10-12): Inter queda.
 
 ## No verificado
 

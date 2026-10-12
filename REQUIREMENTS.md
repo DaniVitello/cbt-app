@@ -14,7 +14,7 @@ Documento de referencia para construir la app paso a paso. Cada MVP tiene: objet
 - Tono del micro-copy: cercano, sin culpa, sin lenguaje clínico innecesario. Nada de rachas que castigan ni mensajes tipo "¡Perdiste tu racha!".
 
 ### Stack base (ya existente)
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind v3 · shadcn/ui · React Query v5 · Zod · Fastify 5 + SQLite (se redefine su rol a partir del MVP 2).
+Next.js 15 (App Router) · React 19 · TypeScript · Tailwind v3 · shadcn/ui · React Query v5 · Zod · Fastify 5 + SQLite (se redefine su rol a partir del MVP 3).
 
 ### Calidad (aplica a todos los MVP)
 - **Accesibilidad:** WCAG 2.2 AA. Contraste ≥ 4.5:1 en texto, targets táctiles ≥ 44×44 px, foco visible, gestión de foco al cambiar de paso, `aria-live` en estados dinámicos, respetar `prefers-reduced-motion`, nada que dependa solo del color.
@@ -29,12 +29,12 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind v3 · shadcn/ui ·
 - [ ] Tests de lógica nueva pasando
 - [ ] 1 flujo E2E pasando
 - [ ] Revisión de accesibilidad manual (teclado + lector de pantalla básico)
-- [ ] Probado en mobile (desde MVP 2) y en modo claro y oscuro
+- [ ] Probado en mobile (desde MVP 3) y en modo claro y oscuro
 - [ ] README actualizado con cómo correrlo
 
 ---
 
-## Sistema de diseño (se define en el MVP 1 y se reutiliza)
+## Sistema de diseño (se completa en el MVP 2 y se reutiliza en los siguientes)
 
 ### Tokens
 Definir como variables CSS (formato HSL de shadcn) y exponer en `tailwind.config.ts`.
@@ -95,7 +95,7 @@ Modo claro/oscuro/sistema persistido con `next-themes`. Evitar el flash de tema 
 ### D1.5 Pulido visual
 - Aplicar el sistema de diseño completo.
 - Estados vacíos, skeletons y errores en todas las pantallas.
-- Layout responsive desde 360 px (aunque el foco mobile sea el MVP 2).
+- Layout responsive desde 360 px (aunque el foco mobile sea el MVP 3).
 
 ## Técnico
 
@@ -206,7 +206,64 @@ IA, mobile/PWA, check-in de ánimo, daily task, auth.
 
 ---
 
-# MVP 2 — Mobile y local-first
+# MVP 2 — Sistema de diseño mobile-first (con ui-ux-pro-max)
+
+**Duración estimada:** 1 semana
+**Objetivo:** que el sistema visual nazca responsive: tokens, tipografía y componentes base que refluven desde 360 px, generados con la skill ui-ux-pro-max y pasados por nuestros gates. Las pantallas se pulen después del mobile (MVP 3); lo que se define acá sobrevive al rediseño.
+
+## Decisión de alcance (cerrada)
+
+Sistema y tokens ahora; pulido de pantallas después del MVP 3. Pulir el desktop hoy es trabajo que el rediseño mobile-first tiraría. La skill se usa con filtro: sirve su sistema visual (paleta, tipografía, componentes que refluven, checklist responsive), no sus patrones de marketing (heroes, conversión, CTAs agresivos) que contradicen el tono de la app.
+
+## Diseño
+
+### D2.1 Alcance visual
+- Paleta calmada claro/oscuro (1 primario calmo, neutro cálido, 3 semánticos), tipografía legible en ES (probar diacríticos y voseo), escala 12/14/16/18/20/24/30, espaciado base 4 px, 2 radios, 2 sombras, movimiento 150/250 ms con variante sin animación.
+- Todo tokenizado en variables CSS + `tailwind.config.ts`. Nada hardcodeado en componentes (se verifica con grep).
+
+### D2.2 Componentes base que faltan
+`Dialog`, `Tabs`, `Badge` (estado), `BottomNav` (shell para el MVP 3), `CrisisBanner` (shell para el MVP 5). Los existentes (Button, Card, Slider, Select, Stepper, ProgressBar, EmptyState, Skeleton…) se alinean a los tokens.
+
+### D2.3 Mobile-first desde el token
+- Nada de anchos fijos; todo refluve (texto resiliente: sin clipping, chips con `+n` operable).
+- Targets ≥ 44 px, inputs ≥ 16 px (evita el zoom automático de iOS), foco visible, `prefers-reduced-motion` respetado.
+- Contraste ≥ 4.5:1 verificado por token, no por pantalla.
+
+## Técnico
+
+### T2.1 Instalar la skill (prerequisito humano, una vez)
+`npm install -g ui-ux-pro-max-cli` + `uipro init --ai opencode` (queda en `.opencode/skills/`, versionada con el repo) + Python 3 para su buscador (`search.py`).
+
+### T2.2 Generar el sistema con la skill
+`search.py` con el brief de la app → patrón + estilo + paleta + tipografía + efectos + anti-patrones. Salida a `design-system/cbt-app/MASTER.md` (fuente de verdad versionada, se revisa con criterio: tono sobrio, ES rioplatense).
+
+### T2.3 Aplicar con guardarraíles (el orden de conflictos manda)
+1. Privacidad y seguridad. 2. Accesibilidad (gates automáticos + checklist). 3. Specs UX existentes. 4. Arquitectura. 5. Sugerencias de la skill. Lo que choque con 1–4 se descarta con el motivo anotado.
+
+### T2.4 Componentes + verificación responsive
+- Implementar/ajustar componentes contra `MASTER.md`.
+- Gate nuevo: capturas 360/768/1280 en claro y oscuro + checklist responsive de la skill (sin clipping, sin scroll horizontal en 360, chips operables).
+
+## Tareas
+1. Instalar la skill (CLI + Python) y verificar que `search.py` responde.
+2. Generar `design-system/cbt-app/MASTER.md` y revisarlo (tono, ES, sobriedad).
+3. Tokens en CSS + `tailwind.config.ts` (paleta, tipo, espaciado, radios, movimiento).
+4. Componentes faltantes + alineación de los existentes a tokens.
+5. Verificación responsive + a11y de componentes aislados (antes de las pantallas).
+6. Tests, lint y typecheck en verde; E2E cadena 1 sigue pasando.
+
+## Criterios de aceptación
+- [ ] `MASTER.md` existe y cada token tiene motivo (no "porque la skill lo dijo").
+- [ ] Cero colores/medidas hardcodeadas fuera de tokens.
+- [ ] Componentes base bien en 360 px claro/oscuro, con teclado.
+- [ ] Nada contradice accesibilidad (contraste medido, motion respetado).
+
+## Fuera de alcance
+Pulido de pantallas (después del MVP 3), PWA/Dexie (MVP 3), ejercicios nuevos.
+
+---
+
+# MVP 3 — Mobile y local-first
 
 **Duración estimada:** 1–2 semanas
 **Objetivo:** poder usar y probar la app desde el celular, con datos propios en el dispositivo.
@@ -221,32 +278,32 @@ IA, mobile/PWA, check-in de ánimo, daily task, auth.
 | Multi-dispositivo | No | Sí |
 | Costo/complejidad | Bajo | Alto |
 
-**Se asume A.** Si más adelante hace falta B, el repositorio de datos (T2.2) permite cambiar la implementación sin tocar la UI.
+**Se asume A.** Si más adelante hace falta B, el repositorio de datos (T3.2) permite cambiar la implementación sin tocar la UI.
 
 ## Diseño
 
-### D2.1 Mobile-first
+### D3.1 Mobile-first
 - Rediseñar para 360–430 px como caso principal; desktop como adaptación.
 - **Navegación inferior** (`BottomNav`): Inicio · Ejercicios · Temas · Historial/Progreso.
 - Wizard a pantalla completa, botones de acción en zona de pulgar (parte inferior), teclado virtual sin tapar el campo activo.
 - Safe areas (`env(safe-area-inset-*)`) para notch y barras del sistema.
 - Targets ≥ 44 px, tipografía mínima 16 px en inputs (evita zoom automático en iOS).
 
-### D2.2 Experiencia de instalación
+### D3.2 Experiencia de instalación
 - Pantalla "Instalar en tu celular" con instrucciones cortas para Android e iOS (en iOS: Compartir → Agregar a inicio).
 - Ícono propio (192, 512 y maskable), splash y `theme-color` coherentes con la paleta.
 
-### D2.3 Offline
+### D3.3 Offline
 - La app funciona sin conexión para todo lo que no sea IA. Indicador discreto de estado de conexión.
 
 ## Técnico
 
-### T2.1 PWA
+### T3.1 PWA
 - `manifest.webmanifest`: `name`, `short_name`, `display: standalone`, `start_url`, `theme_color`, `background_color`, íconos (incl. maskable).
 - Service worker con precache de app shell y estrategia stale-while-revalidate para assets. Opciones: **Serwist** (`@serwist/next`) o SW manual mínimo. **Verificar compatibilidad con Turbopack** en la versión de Next que uses; si hay conflicto, usar webpack solo para el build de producción.
 - **HTTPS obligatorio** para el service worker (excepto `localhost`). Para probar en el celular durante desarrollo: túnel (ej. `cloudflared`) o deploy en Vercel/Cloudflare Pages.
 
-### T2.2 Capa de datos local
+### T3.2 Capa de datos local
 - IndexedDB con **Dexie**.
 - Patrón **Repository**: interfaz `ThemeRepo`, `EntryRepo` con implementación `DexieRepo` (ahora) y `ApiRepo` (futura). La UI y React Query hablan solo con la interfaz.
 
@@ -264,17 +321,17 @@ interface EntryRepo {
 - Migración inicial: botón "Importar desde la versión anterior" que lee el JSON exportado o consulta una vez a la API local.
 - Pedir **almacenamiento persistente** (`navigator.storage.persist()`) para reducir el riesgo de que el navegador borre datos.
 
-### T2.3 Export / Import / Borrado
+### T3.3 Export / Import / Borrado
 - Exportar **todo** a un único JSON versionado (`{ schemaVersion, exportedAt, themes, entries, ... }`).
 - Importar con validación Zod y modo "fusionar" vs "reemplazar".
 - "Borrar todos mis datos" con confirmación en dos pasos.
 - Aviso claro: *si se borran los datos del navegador, se pierden; exportá copias de seguridad.*
 
-### T2.4 Qué pasa con Fastify
+### T3.4 Qué pasa con Fastify
 - Se mantiene en el repo pero **no es necesario** para uso normal.
-- Se reactivará en el MVP 4 con un único rol: proxy de IA (sin almacenar datos).
+- Se reactivará en el MVP 5 con un único rol: proxy de IA (sin almacenar datos).
 
-### T2.5 Cifrado en reposo (opcional, evaluar)
+### T3.5 Cifrado en reposo (opcional, evaluar)
 - Passphrase del usuario → clave con PBKDF2/Argon2 → AES-GCM con Web Crypto para cifrar `answers`. Costo: si olvida la passphrase, no hay recuperación. Decidir con criterio de riesgo/beneficio; no bloquear el MVP.
 
 ## Tareas
@@ -301,35 +358,35 @@ APK nativa (Capacitor/TWA), notificaciones push, IA, sync entre dispositivos.
 
 ---
 
-# MVP 3 — Hábito: check-in de ánimo y daily task
+# MVP 4 — Hábito: check-in de ánimo y daily task
 
 **Duración estimada:** 2 semanas
 **Objetivo:** que haya una razón para volver todos los días, sin presión ni culpa.
 
 ## Diseño
 
-### D3.1 Check-in de ánimo (≤ 10 segundos)
+### D4.1 Check-in de ánimo (≤ 10 segundos)
 - Pantalla mínima: escala 1–5 con iconos + etiqueta de texto (nunca solo color/emoji), selección opcional de 1–3 emociones de una lista fija, nota opcional de una línea.
 - Accesible desde la home en un solo toque. Se puede registrar más de una vez por día.
 - Al guardar: confirmación breve y neutra. Sin diagnósticos ni interpretaciones.
 
-### D3.2 Daily task
+### D4.2 Daily task
 - Tarjeta destacada en la home: **una sola tarea**, de 2–5 minutos, con título, motivo ("Porque ayer armaste un experimento…") y botones *Hacer ahora* / *Después* / *Hoy no*.
 - "Hoy no" es una respuesta válida y no genera penalización.
 - Tipos: seguimiento de experimento, retomar un tema, práctica corta (respiración/PMR breve), reflexión de una pregunta.
 
-### D3.3 Progreso
+### D4.3 Progreso
 - Vista simple: tendencia de ánimo (línea de 14/30 días), ejercicios completados por tema, cambio en los sliders por tema.
 - Sin puntajes totales, sin "nivel", sin comparaciones.
 - Lenguaje descriptivo, no evaluativo ("Esta semana hiciste 3 ejercicios").
 
-### D3.4 Recordatorio
+### D4.4 Recordatorio
 - Configuración opcional de un recordatorio diario (hora elegida por el usuario).
 - Si no se activa, la app funciona igual.
 
 ## Técnico
 
-### T3.1 Modelo de datos
+### T4.1 Modelo de datos
 
 ```ts
 interface MoodCheckin {
@@ -356,7 +413,7 @@ interface DailyTask {
 }
 ```
 
-### T3.2 Generador de daily task (basado en reglas, sin IA)
+### T4.2 Generador de daily task (basado en reglas, sin IA)
 Función pura `pickDailyTask(state, today): DailyTask | null`. Reglas en orden de prioridad:
 1. Existe un `Behavioral Experiment` completado hace ≥ 1 día sin seguimiento → `follow_up`.
 2. Hay un tema `in_progress` sin actividad ≥ 3 días → `resume_theme`.
@@ -365,15 +422,15 @@ Función pura `pickDailyTask(state, today): DailyTask | null`. Reglas en orden d
 - Máximo 1 tarea por día; si hay una `pending` del día, se mantiene.
 - Cada regla se testea de forma unitaria con estados fabricados.
 
-### T3.3 Progreso
+### T4.3 Progreso
 - Consultas agregadas sobre Dexie (por `localDate`).
 - Gráficos livianos (Recharts o SVG propio). Alternativa textual accesible para cada gráfico (tabla o resumen).
 
-### T3.4 Notificaciones
+### T4.4 Notificaciones
 - Primero **recordatorio sin push**: al abrir la app, mostrar la tarjeta del día.
 - Web Push es opcional y limitado: en iOS solo funciona con la PWA instalada (iOS 16.4+) y requiere servidor + VAPID. No lo metas en este MVP salvo que el hábito lo justifique.
 
-### T3.5 Zonas horarias
+### T4.5 Zonas horarias
 - Usar siempre `localDate` calculada en el dispositivo. No agrupar por UTC.
 
 ## Tareas
@@ -396,7 +453,7 @@ Detección automática de ánimo, IA, push notifications obligatorias, gamificac
 
 ---
 
-# MVP 4 — IA acotada y con guardarraíles
+# MVP 5 — IA acotada y con guardarraíles
 
 **Duración estimada:** 2–3 semanas
 **Objetivo:** que la IA ayude a elegir y a entender, sin hacer de terapeuta.
@@ -415,36 +472,36 @@ Detección automática de ánimo, IA, push notifications obligatorias, gamificac
 
 ## Diseño
 
-### D4.1 Etiquetado claro
+### D5.1 Etiquetado claro
 - Todo contenido generado lleva una etiqueta visible ("Sugerencia de IA") y un texto fijo: *"Esto no reemplaza a un profesional."*
 - Estilo visual distinto al contenido propio de los ejercicios.
 
-### D4.2 Onboarding guiado
+### D5.2 Onboarding guiado
 - Pantalla inicial opcional: "Contame en pocas palabras qué te gustaría trabajar" (textarea, máx. 500 caracteres).
 - Resultado: 1–3 ejercicios recomendados con una línea de motivo cada uno + botón *Empezar*. Opción de saltar y elegir manualmente.
 
-### D4.3 Ayuda con resultados
+### D5.3 Ayuda con resultados
 - En el cierre de un ejercicio: bloque colapsable "Resumen y siguiente paso" con (a) resumen breve, (b) 1–3 observaciones formuladas como preguntas o hipótesis ("¿Notás que…?"), (c) siguiente ejercicio sugerido.
 - Cada observación se puede **aceptar, editar o descartar**. Solo lo aceptado se guarda.
 
-### D4.4 Control del usuario
+### D5.4 Control del usuario
 - La IA está **desactivada por defecto**; se activa en Ajustes con un consentimiento explícito.
 - Antes del primer envío: pantalla que explica *qué datos se envían, a qué servicio y cómo se tratan*.
 - Botón visible "Enviar a la IA" en cada uso (nada se envía automáticamente).
 - Indicador de carga y de error con alternativa manual siempre disponible.
 
-### D4.5 Pantalla de crisis
+### D5.5 Pantalla de crisis
 - Componente `CrisisBanner` / pantalla dedicada: mensaje empático breve, recursos de ayuda y botón para volver.
 - Siempre accesible desde la barra de navegación o ajustes, no solo cuando se detecta.
 
 ## Técnico
 
-### T4.1 Rol de Fastify
+### T5.1 Rol de Fastify
 - Se reactiva **solo como proxy de IA**: guarda la API key en el servidor, aplica rate limit y no persiste contenido de usuarios.
 - Debe ser alcanzable desde la PWA por HTTPS (desplegado, p. ej., en Fly.io/Render/Cloudflare Workers). CORS restringido al origen de la app.
 - Sin logs del contenido de los prompts ni de las respuestas.
 
-### T4.2 Endpoints
+### T5.2 Endpoints
 
 | Endpoint | Entrada | Salida (validada con Zod) |
 |---|---|---|
@@ -452,35 +509,35 @@ Detección automática de ánimo, IA, push notifications obligatorias, gamificac
 | `POST /api/ai/summary` | `{ exerciseId, answers, measures }` | `{ summary, observations: string[], nextExerciseId? }` |
 | `POST /api/ai/explain` | `{ exerciseId, fieldId }` | `{ explanation }` |
 
-### T4.3 Salida estructurada
+### T5.3 Salida estructurada
 - Pedir JSON al modelo con esquema explícito, validar con Zod, reintentar una vez y, si falla, mostrar el estado de error con alternativa manual.
 - Los ids de ejercicio se validan contra el catálogo real; descartar ids inventados.
 
-### T4.4 System prompt (requisitos mínimos)
+### T5.4 System prompt (requisitos mínimos)
 - Rol: asistente de apoyo para ejercicios de autoayuda; **no** terapeuta.
 - Prohibido: diagnosticar, nombrar trastornos como conclusión, indicar medicación, dar instrucciones clínicas, afirmar que "esto cura/trata".
 - Formular observaciones como hipótesis y preguntas, en el idioma de la interfaz, tono cercano y breve.
 - Si detecta riesgo (autolesión, suicidio, daño a terceros), **no continuar el análisis**: devolver una bandera `crisis: true`.
 
-### T4.5 Detección de crisis (defensa en capas)
+### T5.5 Detección de crisis (defensa en capas)
 1. **Cliente**, antes de enviar: lista de patrones de lenguaje de riesgo (ES/EN). Si coincide, no se llama a la IA; se muestra la pantalla de crisis.
 2. **Servidor**, antes de generar: clasificación rápida del texto (regex + llamada de clasificación). Si es positivo, devolver `crisis: true` sin generar contenido.
 3. **Modelo**: instrucción de devolver `crisis: true` ante riesgo.
 - Los recursos de ayuda viven en `data/crisis-resources.ts`, por país, con **verificación manual de números vigentes** antes de cada release (para Argentina, confirmar las líneas actuales, p. ej. la 135 del Centro de Asistencia al Suicida).
 - La app nunca debe seguir "conversando" tras una detección.
 
-### T4.6 Privacidad
+### T5.6 Privacidad
 - Enviar solo lo mínimo necesario (no todo el historial).
 - Opción de redacción previa: avisar que no incluyan nombres propios o datos identificables; evaluar redacción automática simple de emails/teléfonos.
 - Elegir el proveedor y su configuración de retención de datos de forma consciente, y documentarla en la pantalla de consentimiento.
 - Interruptor para apagar la IA y borrar sugerencias guardadas.
 
-### T4.7 Evaluación (evals)
+### T5.7 Evaluación (evals)
 - Conjunto fijo de ~30–50 casos en un archivo (`evals/cases.json`): casos normales, ambiguos, intentos de que diagnostique, y casos de crisis explícitos e implícitos.
 - Script que corre los casos y verifica: esquema válido, no diagnostica, `crisis` marcada cuando corresponde, ids válidos.
 - Se ejecuta antes de cada cambio de prompt o de modelo.
 
-### T4.8 Control de costos
+### T5.8 Control de costos
 - Límite de longitud de entrada, `max_tokens` bajo, rate limit por IP/dispositivo, timeout y cacheo del último resultado por entry.
 
 ## Tareas
@@ -494,7 +551,7 @@ Detección automática de ánimo, IA, push notifications obligatorias, gamificac
 8. Despliegue del proxy por HTTPS y prueba desde el celular.
 
 ## Criterios de aceptación
-- [ ] Con la IA apagada, la app funciona igual que en el MVP 3.
+- [ ] Con la IA apagada, la app funciona igual que en el MVP 4.
 - [ ] Ningún texto se envía sin una acción explícita.
 - [ ] Los casos de crisis de la suite de evals siempre disparan la pantalla de crisis, sin generación.
 - [ ] Las sugerencias te resultan útiles y específicas, no genéricas (juicio tuyo tras 1–2 semanas).
@@ -505,30 +562,30 @@ Chat abierto, memoria de largo plazo de la IA, voz, detección automática de á
 
 ---
 
-# MVP 5 — Bienestar y profundización
+# MVP 6 — Bienestar y profundización
 
 **Duración estimada:** 2 semanas
 **Objetivo:** sumar prácticas y contenido de bienestar **conectados a lo que la persona está haciendo**.
 
 ## Diseño
 
-### D5.1 Prácticas guiadas
+### D6.1 Prácticas guiadas
 - Biblioteca corta (empezar con 5–8): respiración, PMR breve, grounding, escritura de una línea, reencuadre rápido, gratitud específica.
 - Cada práctica: duración (1–5 min), para qué sirve, paso a paso. Reproductor simple con temporizador, pausa y opción de salir.
 - Animaciones suaves (p. ej. respiración) con variante estática por `prefers-reduced-motion`.
 
-### D5.2 Contenido contextual
+### D6.2 Contenido contextual
 - Frases e ideas **aparecen en contexto**: al cierre de un ejercicio, junto al check-in, o dentro de la daily task. No hay un feed independiente.
 - Selección por etiqueta (ejercicio completado, ánimo del día, tema).
 - Botón "guardar" para crear una colección personal de lo que resonó.
 
-### D5.3 Tono
+### D6.3 Tono
 - Sin frases de póster ni positividad forzada. Texto concreto, breve y accionable.
 - Evitar lenguaje que invalide lo que la persona siente.
 
 ## Técnico
 
-### T5.1 Contenido como datos
+### T6.1 Contenido como datos
 
 ```ts
 interface WellbeingItem {
@@ -545,18 +602,18 @@ interface WellbeingItem {
 
 - Archivo `data/wellbeing.ts` validado con Zod; mismo patrón que los ejercicios.
 
-### T5.2 Selección
+### T6.2 Selección
 - Función pura `pickWellbeingItem(context)` con reglas por etiquetas y sin repetir lo visto recientemente (tabla `seen`).
 - Integración con `pickDailyTask` para el tipo `short_practice`.
 
-### T5.3 Reproductor de práctica
+### T6.3 Reproductor de práctica
 - Componente `PracticePlayer` con temporizador basado en timestamps (no en `setInterval` acumulado) para que no se desfase al pausar o con la pantalla bloqueada.
 - Cuidar `Wake Lock API` (opcional) para que la pantalla no se apague durante la práctica.
 
-### T5.4 Personalización con IA (opcional, solo si el MVP 4 funcionó)
+### T6.4 Personalización con IA (opcional, solo si el MVP 5 funcionó)
 - Sugerir cuál práctica encaja mejor, dentro del catálogo existente; no generar prácticas nuevas.
 
-### T5.5 Revisión de contenido
+### T6.5 Revisión de contenido
 - Todo el contenido lo redactás o revisás vos. Evitar afirmaciones clínicas ("esto reduce la depresión"). Idealmente validar las prácticas con un profesional si la app se comparte.
 
 ## Tareas
@@ -581,17 +638,17 @@ Feed social, comunidad, contenido generado libremente por IA, audio/voz propia.
 | Tema | Cuándo | Nota |
 |---|---|---|
 | **Tests y CI** | Desde MVP 1 | GitHub Actions: lint, typecheck, Vitest, Playwright. |
-| **Observabilidad** | Desde MVP 4 | Solo métricas del proxy (errores, latencia). Nunca contenido. |
-| **Seguridad** | MVP 2 y 4 | CSP estricta, sin dependencias innecesarias, secrets solo en servidor. |
-| **Export a PDF** | Tras MVP 3 | Resumen de un tema para llevar a una sesión con un profesional. |
-| **APK / tiendas** | Después de MVP 5 | Capacitor o TWA envolviendo la misma web. |
+| **Observabilidad** | Desde MVP 5 | Solo métricas del proxy (errores, latencia). Nunca contenido. |
+| **Seguridad** | MVP 3 y 5 | CSP estricta, sin dependencias innecesarias, secrets solo en servidor. |
+| **Export a PDF** | Tras MVP 4 | Resumen de un tema para llevar a una sesión con un profesional. |
+| **APK / tiendas** | Después de MVP 6 | Capacitor o TWA envolviendo la misma web. |
 | **Auth y sync (opción B)** | Solo si hay otros usuarios | Implica política de privacidad, cifrado y revisión legal. |
 
 # Decisiones abiertas (resolver antes de cada MVP)
 
 1. **Antes del MVP 1:** idioma de la interfaz (ES / EN / ambos).
-2. **Antes del MVP 2:** local-first (A) confirmado; ¿cifrado con passphrase sí o no?
-3. **Antes del MVP 4:** proveedor de IA y su política de retención; dónde se despliega el proxy.
+2. **Antes del MVP 3:** local-first (A) confirmado; ¿cifrado con passphrase sí o no?
+3. **Antes del MVP 5:** proveedor de IA y su política de retención; dónde se despliega el proxy.
 4. **Antes de abrir la app a otras personas:** revisión legal por jurisdicción, términos, política de privacidad y validación de contenido con un profesional.
 
 # Resumen del pipeline
@@ -599,7 +656,8 @@ Feed social, comunidad, contenido generado libremente por IA, audio/voz propia.
 | MVP | Foco | Duración | Criterio de éxito |
 |---|---|---|---|
 | 1 | Temas, wizard, medición, UI | 2–3 sem | Cadena de 3 ejercicios fluida |
-| 2 | PWA y local-first | 1–2 sem | Una semana de uso real en el celular |
-| 3 | Check-in y daily task | 2 sem | Volvés varios días seguidos sin forzarte |
-| 4 | IA acotada con guardarraíles | 2–3 sem | Sugerencias útiles y evals de crisis en verde |
-| 5 | Bienestar contextual | 2 sem | Cada ítem tiene motivo visible y es removible |
+| 2 | Sistema de diseño mobile-first | 1 sem | Tokens/componentes responden en 360 px |
+| 3 | PWA y local-first | 1–2 sem | Una semana de uso real en el celular |
+| 4 | Check-in y daily task | 2 sem | Volvés varios días seguidos sin forzarte |
+| 5 | IA acotada con guardarraíles | 2–3 sem | Sugerencias útiles y evals de crisis en verde |
+| 6 | Bienestar contextual | 2 sem | Cada ítem tiene motivo visible y es removible |

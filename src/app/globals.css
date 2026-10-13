@@ -4,56 +4,60 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --background: 37.5 44.4% 96.5%;
+    --foreground: 12 6.5% 15.1%;
+    --card: 40 100% 98.8%;
+    --card-foreground: 12 6.5% 15.1%;
+    --popover: 40 100% 98.8%;
+    --popover-foreground: 12 6.5% 15.1%;
+    --primary: 26 90.5% 37.1%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 36.8% 88.8%;
+    --secondary-foreground: 12 6.5% 15.1%;
+    --muted: 35.3 37.8% 91.2%;
+    --muted-foreground: 33.3 5.5% 32.4%;
+    --accent: 40 36.8% 88.8%;
+    --accent-foreground: 12 6.5% 15.1%;
+    --border: 38.4 32.5% 84.9%;
+    --input: 38.4 32.5% 84.9%;
+    --ring: 26 90.5% 37.1%;
     --radius: 0.5rem;
 
-    /* Semantic colors */
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 355.7 100% 97.3%;
-    --warning: 37.7 92.1% 50.2%;
-    --warning-foreground: 20.9 91.6% 14.1%;
-    --error: 0 84.2% 60.2%;
-    --error-foreground: 0 0% 98%;
+    /* Semánticos (pares medidos ≥ 4.5:1, ver docs de DS-2) */
+    --success: 85.9 78.4% 27.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 48 96.5% 88.8%;
+    --warning-foreground: 21.7 77.8% 26.5%;
+    --error: 0 72.2% 50.6%;
+    --error-foreground: 0 0% 100%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.2 76.3% 3.9%;
+    --background: 24 9.8% 10%;
+    --foreground: 36.9 39.4% 93.5%;
+    --card: 12 6.5% 15.1%;
+    --card-foreground: 36.9 39.4% 93.5%;
+    --popover: 12 6.5% 15.1%;
+    --popover-foreground: 36.9 39.4% 93.5%;
+    --primary: 43.3 96.4% 56.3%;
+    --primary-foreground: 24 9.8% 10%;
+    --secondary: 30 6.3% 25.1%;
+    --secondary-foreground: 36.9 39.4% 93.5%;
+    --muted: 30 6.3% 25.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 30 6.3% 25.1%;
+    --accent-foreground: 36.9 39.4% 93.5%;
+    --border: 30 6.3% 25.1%;
+    --input: 30 6.3% 25.1%;
+    --ring: 43.3 96.4% 56.3%;
 
-    /* Semantic colors */
-    --success: 142.1 70.6% 45.3%;
-    --success-foreground: 144.9 80.4% 10%;
-    --warning: 47.9 95.8% 53.1%;
-    --warning-foreground: 20.9 91.6% 14.1%;
-    --error: 0 62.8% 30.6%;
-    --error-foreground: 0 85.7% 97.3%;
+    /* Semánticos (pares medidos ≥ 4.5:1) */
+    --success: 142.4 71.8% 29.2%;
+    --success-foreground: 0 0% 100%;
+    --warning: 20.9 91.7% 14.1%;
+    --warning-foreground: 45.9 96.7% 64.5%;
+    --error: 0 90.6% 70.8%;
+    --error-foreground: 0 0% 100%;
   }
 }
 

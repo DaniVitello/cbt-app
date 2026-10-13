@@ -8,7 +8,7 @@ import "../globals.css";
 import { Providers } from "@/components/providers";
 import { AppHeader } from "@/components/AppHeader";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "CBT App",
@@ -32,7 +32,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <AppHeader />

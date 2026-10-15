@@ -2,15 +2,15 @@
 
 Fuente generadora: skill `ui-ux-pro-max` (`search.py --design-system`, 2026-10-12). Este archivo es la **decisión curada**, no la salida cruda: cada token tiene motivo; lo rechazado está abajo con su motivo. Manda el orden de conflictos del proyecto (privacidad → a11y → specs UX → arquitectura → sugerencias externas).
 
-## Dirección (decisión del dueño, D1)
+## Dirección (decisión del dueño + prototipo `ctb-exercises`)
 
-Cálida, sin eléctricos, tonos pastel, calma y consistencia durante los ejercicios. Superficies en tintes suaves; tinta profunda para legibilidad. Nada de neones, nada de violeta tech, nada de marketing.
+Cálida, sin eléctricos, tonos pastel, calma y consistencia durante los ejercicios. Lenguaje adoptado del prototipo: fondo crema, tinta teal profunda, primario teal, acento terracota, salvia como apoyo. Titulares en Fraunces (display, solo h1), cuerpo en Inter. Nada de neones, nada de violeta tech, nada de marketing.
 
 ## Rechazado del generador (con motivo)
 
 - **Patrón Hero + Testimonios + CTA**: landing de conversión; la app no tiene landing ni testimonios. Sin uso.
 - **Primario violeta `#8B5CF6` + fondo lavanda**: frío/tech, contradice D1. (La propia skill lista los púrpura-AI como anti-patrón en contextos serios.)
-- **Lora + Raleway**: D3 decidió Inter (ya carga optimizada, legible, cubre ES; Raleway light lastima legibilidad emocional).
+- **Lora + Raleway**: descartadas por D3; en su lugar **Fraunces solo para titulares display** (viene del prototipo, convive con Inter en el cuerpo).
 - **Scroll Reveal + GSAP**: animación por scroll de 300–400ms en formularios = distracción + dependencia nueva sin necesidad. Movimiento: solo hovers 150/250ms + la regla global `reduced-motion` ya existente.
 - **CTA vibrante / conversión**: no hay conversión que optimizar; hay personas escribiendo sobre sus emociones.
 
@@ -22,31 +22,33 @@ Cálida, sin eléctricos, tonos pastel, calma y consistencia durante los ejercic
 
 ## Tokens
 
-### Color — modo claro (propuesta; DS-2 mide contraste por token)
+### Color — modo claro (medido por script, todo ≥ 4.5:1 salvo bordes ≥ 3:1)
 
 | Rol | Valor | Motivo |
 |---|---|---|
-| `background` | `#FAF7F2` papel cálido | Calma; base de todo |
-| `foreground` | `#292524` tinta cálida (stone-800) | Legibilidad sin negro puro (menos duro) |
-| `card` | `#FFFDF9` | Apenas sobre el fondo |
-| `muted` / arena | `#F1EAE0` | Superficies secundarias cálidas |
-| `border` | `#E5DCCC` | Bordes que no gritan |
-| `primary` (links, acentos, foco) | `#B45309` terracota profundo (amber-700) | Cálido + pasa 4.5:1 sobre papel (a medir en DS-2) |
-| `success` | `#4D7C0F` salvia profunda | Calma; a medir |
-| `warning` | texto `#78350F` sobre `amber-100` | Patrón badge tinta-sobre-tinte (nunca color solo) |
-| `error` | `#DC2626` (se mantiene) | Ya medido: 5:1 sobre blanco |
+| `background` | `#FAF6F1` papel cálido | Calma; base de todo |
+| `foreground` | `#1A2E2C` tinta teal profunda | Legibilidad sin negro puro |
+| `card` / `popover` | `#FFFFFF` | Apenas sobre el fondo |
+| `muted` / arena | `#F3EDE4` | Superficies secundarias cálidas |
+| `secondary` | `#DCE9E1` velo salvia | Pistas frías dentro de lo cálido |
+| `accent` | `#F3E0D8` velo terracota | Calidez en hovers/selección |
+| `border` / `input` | `#96865F` arena media (3.32:1) | Límite visible sin gritar (WCAG 1.4.11) |
+| `primary` (links, botones, foco) | `#1E4D4B` teal profundo (9.47 blanco / 8.80 papel) | Calma + autoridad |
+| `success` | `#2E7D4F` verde contenido (5.05 blanco) | Sin neones |
+| `warning` | texto `#78350F` sobre `#FEF3C7` (8.15) | Patrón badge tinta-sobre-tinte |
+| `error` | `#DC2626` (4.52 papel) | Se mantiene |
 
-### Color — modo oscuro (espejo, no inversión automática)
+### Color — modo oscuro (espejo diseñado, medido)
 
-Fondo espresso `#1C1917`, superficies `#292524`, tinta `#F5F0E8`, primario ámbar claro `#FBBF24` (a medir sobre espresso). Muted/border en piedra oscura. Semánticos en tintes oscuros con texto claro.
+Fondo teal-nocturno `#0E1F1E`, superficies `#1A2E2C`, tinta crema `#F3EDE4`, primario salvia clara `#7BA89C` (6.42 en ambos roles), bordes `#52756E` (3.35), acento `#1E3835`. Semánticos: success `#2E7D4F` + blanco, warning `#451A03` + `#FCD34D`, error `#F87171`.
 
-### Tipografía (D3: Inter queda)
+### Tipografía (D3: Inter en cuerpo + Fraunces display en h1)
 
-Inter vía `next/font` (latin cubre ES). Escala del roadmap sin excepciones: 12/14/16/18/20/24/30 — el `text-3xl` (36) de la home baja a 30. **Inputs y textareas a 16px mínimo** (iOS hace zoom bajo 16px). Interlineado ≥ 1.5 en textos largos.
+Inter vía `next/font` (latin cubre ES). Fraunces vía `next/font` con variable `--font-display`, solo titulares `h1` (clase `font-display`). Escala sin excepciones: 12/14/16/18/20/24/30. **Inputs y textareas a 16px mínimo** (iOS hace zoom bajo 16px). Interlineado ≥ 1.5 en textos largos.
 
 ### Forma y movimiento
 
-- Radios: `0.5rem` base (`--radius`), pill `full`. Sombras contenidas (`sm/md`, nunca decorativas).
+- Radios: `1.125rem` base (`--radius`, del prototipo), pill `full`. Sombras contenidas (`sm/md`, nunca decorativas).
 - Espaciado base 4 (default Tailwind, se queda).
 - Movimiento 150/250ms easing estándar + regla global `prefers-reduced-motion` (ya existe, verificar que cubra lo nuevo).
 

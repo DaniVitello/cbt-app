@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -9,6 +9,7 @@ import { Providers } from "@/components/providers";
 import { AppHeader } from "@/components/AppHeader";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "CBT App",
@@ -32,7 +33,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${fraunces.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <AppHeader />

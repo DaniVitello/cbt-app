@@ -96,7 +96,7 @@ export default function HistoryPage() {
       </Button>
 
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <h1 className="font-display text-2xl font-bold">{t("title")}</h1>
         <Button variant="outline" size="sm" onClick={handleExportAll} disabled={isExporting}>
           {isExporting ? `${tc("export")}…` : t("exportAll")}
         </Button>

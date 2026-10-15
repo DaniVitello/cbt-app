@@ -44,7 +44,7 @@ export function CompletionScreen({
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center">
-        <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+        <h1 ref={headingRef} tabIndex={-1} className="font-display text-2xl font-bold outline-none">
           {t("completionTitle")}
         </h1>
         <p className="mt-2 text-muted-foreground">{exercise.title}</p>

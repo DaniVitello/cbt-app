@@ -54,7 +54,7 @@ export default function ThemePage() {
       </Button>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">{theme.title}</h1>
+        <h1 className="font-display text-2xl font-bold">{theme.title}</h1>
         {theme.description && (
           <p className="mt-2 text-muted-foreground">{theme.description}</p>
         )}

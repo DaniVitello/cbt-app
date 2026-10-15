@@ -61,12 +61,12 @@ export default function ThemePage() {
         <span
           className={`mt-2 inline-block rounded px-2 py-0.5 text-xs ${
             theme.status === "in_progress"
-              ? "bg-blue-100 text-blue-800"
+              ? "bg-primary text-primary-foreground"
               : theme.status === "done"
-                ? "bg-green-100 text-green-800"
+                ? "bg-success text-success-foreground"
                 : theme.status === "archived"
-                  ? "bg-gray-100 text-gray-800"
-                  : "bg-yellow-100 text-yellow-800"
+                  ? "bg-muted text-muted-foreground"
+                  : "bg-warning text-warning-foreground"
           }`}
         >
           {tt(`status.${theme.status}`)}

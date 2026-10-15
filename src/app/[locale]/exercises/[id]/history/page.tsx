@@ -102,7 +102,7 @@ export default function HistoryPage() {
         </Button>
       </div>
       {exportError && (
-        <p role="alert" className="mb-4 text-sm text-red-600">
+        <p role="alert" className="mb-4 text-sm text-error">
           {t("exportError")}
         </p>
       )}
@@ -127,8 +127,8 @@ export default function HistoryPage() {
                   <span
                     className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${
                       entry.status === "completed"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                        ? "bg-success text-success-foreground"
+                        : "bg-warning text-warning-foreground"
                     }`}
                   >
                     {entry.status === "completed"
@@ -147,7 +147,7 @@ export default function HistoryPage() {
                   <Button
                     variant="link"
                     size="sm"
-                    className="text-red-600"
+                    className="text-error"
                     onClick={() => handleDelete(entry.id)}
                   >
                     {tc("delete")}

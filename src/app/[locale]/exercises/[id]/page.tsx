@@ -307,10 +307,10 @@ function ExerciseRoot({ exerciseId, sourceId, fresh }: RootProps) {
           <span className="text-muted-foreground">{t("saving")}</span>
         )}
         {saveStatus === "saved" && (
-          <span className="text-green-700 dark:text-green-600">{t("saved")}</span>
+          <span className="text-success dark:text-success-foreground">{t("saved")}</span>
         )}
         {saveStatus === "error" && (
-          <span className="text-red-600">{t("saveError")}</span>
+          <span className="text-error">{t("saveError")}</span>
         )}
       </div>
 
@@ -361,7 +361,7 @@ function ExerciseRoot({ exerciseId, sourceId, fresh }: RootProps) {
                 </label>
               </div>
               {redoError && (
-                <p role="alert" className="mt-3 text-sm text-red-600">
+                <p role="alert" className="mt-3 text-sm text-error">
                   {t("redoError")}
                 </p>
               )}

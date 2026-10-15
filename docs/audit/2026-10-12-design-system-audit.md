@@ -37,7 +37,7 @@ Faltan del roadmap: Tabs, Badge, BottomNav (shell MVP 3), CrisisBanner (shell MV
 | G-03 | Bug visual | `--popover` sin definir: `bg-popover` del Select no resuelve (dropdown sin fondo) | `select.tsx:36`, sin `--popover` en CSS ni config | S1 |
 | G-04 | Dark mode | Badges con colores fijos (`bg-green-100`, `bg-yellow-100`, `text-red-600` en errores) sin variante dark | `themes/[id]/page.tsx:62`, `history:105`, `exercises/[id]:364` | S2 |
 | G-05 | Mobile | Inputs a 14px: iOS hace zoom automático al enfocar (umbral 16px) | `input.tsx:12`, `textarea.tsx:11` (`text-sm`) | S2 |
-| G-06 | Escala | `text-3xl` (36px) fuera de la escala 12–30 del roadmap | `app/[locale]/page.tsx:41` | S3 |
+| G-06 | Escala | ~~`text-3xl` (36px) fuera de la escala 12–30~~ ERRATA: `text-3xl` = 30px, SÍ está en escala. Sin cambio necesario. | — | — |
 | G-07 | Responsive | Tabla `RowsField` sin estrategia a 360px (overflow potencial) | `RowsField.tsx:31` (`<table class w-full`) | S2 |
 | G-08 | Componentes | Faltan Tabs, Badge, BottomNav, CrisisBanner; Toast existe sin uso | `ui/` (13 archivos), grep `toast(` = 0 | S2 |
 | G-09 | Pulido | Emoji 📝 como ícono + `line-clamp-2` sin ruta accesible al texto completo | `empty-state.tsx:19`, `ExerciseCatalog.tsx:54` | S3 |

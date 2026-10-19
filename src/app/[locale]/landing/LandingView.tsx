@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { useExercises } from "@/hooks/useExercises";
 
 function ArrowIcon({ size = 16 }: { size?: number }) {
   return (
@@ -36,6 +38,8 @@ function StrokeIcon({ d, extra }: { d?: string; extra?: React.ReactNode }) {
 
 export function LandingView() {
   const t = useTranslations("landing");
+  const th = useTranslations("home");
+  const exercises = useExercises();
 
   useEffect(() => {
     const nav = document.getElementById("landing-nav");
@@ -211,6 +215,9 @@ export function LandingView() {
             </li>
             <li>
               <a href="#how-it-works">{t("navHow")}</a>
+            </li>
+            <li>
+              <a href="#exercises">{t("navExercises")}</a>
             </li>
             <li>
               <a href="#testimonials">{t("navStories")}</a>
@@ -422,6 +429,27 @@ export function LandingView() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="exercises" id="exercises">
+        <div className="container">
+          <div className="section-header">
+            <div className="section-tag">{t("exTag")}</div>
+            <h2 className="section-title display">{t("exTitle")}</h2>
+            <p className="section-desc">{t("exDesc")}</p>
+          </div>
+          <div className="features-grid">
+            {exercises.map((ex) => (
+              <Link key={ex.id} href={`/exercises/${ex.id}`} className="feature-card">
+                <div className="section-tag">{th(`categories.${ex.category}`)}</div>
+                <div className="feature-title">{ex.title}</div>
+                <div className="feature-desc">
+                  {t("exCta")} <span aria-hidden="true">→</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

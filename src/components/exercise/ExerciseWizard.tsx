@@ -6,7 +6,7 @@ import type { Exercise, Answers } from "@/types/exercise";
 import { ExerciseForm } from "./ExerciseForm";
 import { CompletionScreen } from "./CompletionScreen";
 import { Button } from "@/components/ui/button";
-import { Stepper } from "@/components/ui/stepper";
+import { StepCarousel } from "@/components/ui/step-carousel";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -94,7 +94,7 @@ export function ExerciseWizard({
 
       {/* Progress */}
       <div className="flex flex-col gap-2">
-        <Stepper
+        <StepCarousel
           steps={exercise.sections.map((s) => s.title)}
           currentStep={currentStep}
           onStepClick={handleStepClick}

@@ -69,7 +69,8 @@
     "redoDelete": "Borrar lo anterior y empezar",
     "redoDeleteDesc": "Se borra tu intento anterior para siempre. Te recomendamos exportarlo antes desde el historial.",
     "redoConfirm": "Confirmar",
-    "redoError": "No se pudo empezar de nuevo. Intentá de nuevo."
+    "redoError": "No se pudo empezar de nuevo. Intentá de nuevo.",
+    "goToStep": "Ir al paso {n}"
   },
   "history": {
     "title": "Historial",
@@ -90,6 +91,11 @@
     "navHow": "Cómo funciona",
     "navStories": "Historias",
     "navCta": "Empezar gratis",
+    "navExercises": "Ejercicios",
+    "exTag": "Ejercicios",
+    "exTitle": "Empezá por el que necesites hoy",
+    "exDesc": "Los 15 ejercicios, con el mismo cuidado. Elegí uno y la app te guía paso a paso.",
+    "exCta": "Explorar ejercicio",
     "heroBadge": "Herramientas TCC basadas en evidencia",
     "heroTitleA": "Reordená tus",
     "heroTitleEm": "pensamientos",

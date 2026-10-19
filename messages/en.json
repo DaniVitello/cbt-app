@@ -69,7 +69,8 @@
     "redoDelete": "Delete the previous attempt and start",
     "redoDeleteDesc": "Your previous attempt is deleted forever. We recommend exporting it first from history.",
     "redoConfirm": "Confirm",
-    "redoError": "Could not start over. Please try again."
+    "redoError": "Could not start over. Please try again.",
+    "goToStep": "Go to step {n}"
   },
   "history": {
     "title": "History",
@@ -90,6 +91,11 @@
     "navHow": "How it works",
     "navStories": "Stories",
     "navCta": "Start free",
+    "navExercises": "Exercises",
+    "exTag": "Exercises",
+    "exTitle": "Start with what you need today",
+    "exDesc": "All 15 exercises, with the same care. Pick one and the app guides you step by step.",
+    "exCta": "Explore exercise",
     "heroBadge": "Evidence-based CBT tools",
     "heroTitleA": "Rewire your",
     "heroTitleEm": "thoughts",

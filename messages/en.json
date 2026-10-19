@@ -72,6 +72,15 @@
     "redoError": "Could not start over. Please try again.",
     "goToStep": "Go to step {n}"
   },
+  "crisis": {
+    "title": "Crisis Support",
+    "intro": "If you're thinking about harming yourself or you're in crisis, you're not alone. Get help now.",
+    "immediateTitle": "Immediate help",
+    "emergency": "Call 911 (or your local emergency number) if you're in immediate danger.",
+    "findHelpline": "Find a helpline in your country: findahelpline.com (verified, free).",
+    "rememberTitle": "Remember",
+    "remember": "Crisis thoughts are temporary, even when they feel permanent. This app doesn't replace a professional: talk to someone you trust or a mental health professional."
+  },
   "history": {
     "title": "History",
     "empty": "No saved entries yet.",

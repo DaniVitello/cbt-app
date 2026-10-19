@@ -7,6 +7,7 @@ import { Link } from "@/i18n/routing";
 import { getTheme, getThemeEntries } from "@/lib/api";
 import { useExercises } from "@/hooks/useExercises";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -58,19 +59,9 @@ export default function ThemePage() {
         {theme.description && (
           <p className="mt-2 text-muted-foreground">{theme.description}</p>
         )}
-        <span
-          className={`mt-2 inline-block rounded px-2 py-0.5 text-xs ${
-            theme.status === "in_progress"
-              ? "bg-primary text-primary-foreground"
-              : theme.status === "done"
-                ? "bg-success text-success-foreground"
-                : theme.status === "archived"
-                  ? "bg-muted text-muted-foreground"
-                  : "bg-warning text-warning-foreground"
-          }`}
-        >
+        <Badge variant={theme.status === "done" ? "success" : theme.status === "archived" ? "secondary" : theme.status === "in_progress" ? "default" : "warning"}>
           {tt(`status.${theme.status}`)}
-        </span>
+        </Badge>
       </div>
 
       <h2 className="mb-4 text-lg font-semibold">{tt("timeline")}</h2>

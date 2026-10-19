@@ -8,6 +8,7 @@ import { Link } from "@/i18n/routing";
 import { getEntries, deleteEntry, exportAll, type Entry } from "@/lib/api";
 import { buildExportFilename, downloadJson } from "@/lib/download";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 
@@ -124,17 +125,11 @@ export default function HistoryPage() {
                   <p className="text-sm text-muted-foreground">
                     {new Date(entry.createdAt).toLocaleString(locale)}
                   </p>
-                  <span
-                    className={`mt-1 inline-block rounded px-2 py-0.5 text-xs ${
-                      entry.status === "completed"
-                        ? "bg-success text-success-foreground"
-                        : "bg-warning text-warning-foreground"
-                    }`}
-                  >
+                  <Badge variant={entry.status === "completed" ? "success" : "warning"}>
                     {entry.status === "completed"
                       ? t("completed")
                       : t("draft")}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="flex items-center gap-3">
                   <Button

@@ -72,6 +72,15 @@
     "redoError": "No se pudo empezar de nuevo. Intentá de nuevo.",
     "goToStep": "Ir al paso {n}"
   },
+  "crisis": {
+    "title": "Apoyo en crisis",
+    "intro": "Si estás pensando en hacerte daño o estás en una crisis, no estás solo/a. Buscá ayuda ahora.",
+    "immediateTitle": "Ayuda inmediata",
+    "emergency": "Llamá al 911 (o al número de emergencias de tu país) si estás en peligro inminente.",
+    "findHelpline": "Encontrá una línea de ayuda en tu país: findahelpline.com (verificado, sin costo).",
+    "rememberTitle": "Recordá",
+    "remember": "Los pensamientos de crisis son temporales, aunque ahora parezcan permanentes. Esta app no reemplaza a un profesional: hablá con alguien de confianza o con un profesional de salud mental."
+  },
   "history": {
     "title": "Historial",
     "empty": "Todavía no hay entradas guardadas.",

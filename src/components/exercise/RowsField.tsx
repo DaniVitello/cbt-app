@@ -26,9 +26,9 @@ export function RowsField({ field, value, onChange }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="rows-field flex flex-col gap-2">
       <Label>{field.label}</Label>
-      <table className="w-full border-collapse">
+      <table className="rows-table w-full border-collapse">
         <thead>
           <tr>
             {field.columns.map((col) => (
@@ -42,7 +42,7 @@ export function RowsField({ field, value, onChange }: Props) {
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {field.columns.map((col) => (
-                <td key={col.id} className="border p-2">
+                <td key={col.id} className="border p-2" data-label={col.label}>
                   <Input
                     value={row[col.id] ?? ""}
                     onChange={(e) => handleChange(rowIndex, col.id, e.target.value)}

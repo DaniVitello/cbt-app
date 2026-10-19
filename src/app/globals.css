@@ -80,3 +80,37 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Tabla de filas repetibles: en pantallas angostas se apila en tarjetas
+   (cada celda muestra su columna como etiqueta). Sin scroll horizontal. */
+@media (max-width: 640px) {
+  .rows-field .rows-table thead {
+    display: none;
+  }
+  .rows-field .rows-table,
+  .rows-field .rows-table tbody,
+  .rows-field .rows-table tr,
+  .rows-field .rows-table td {
+    display: block;
+    width: 100%;
+  }
+  .rows-field .rows-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 0.5rem;
+  }
+  .rows-field .rows-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: none;
+    padding: 0.5rem;
+  }
+  .rows-field .rows-table td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+}

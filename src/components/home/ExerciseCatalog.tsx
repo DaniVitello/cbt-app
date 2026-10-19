@@ -51,7 +51,7 @@ export function ExerciseCatalog() {
                         <CardTitle className="text-base">{exercise.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                        <p className="line-clamp-2 text-sm text-muted-foreground" title={exercise.description}>
                           {exercise.description}
                         </p>
                       </CardContent>

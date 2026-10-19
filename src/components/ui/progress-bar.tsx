@@ -28,7 +28,7 @@ export function ProgressBar({ value, max = 100, className, showLabel, label }: P
         className="h-2 w-full overflow-hidden rounded-full bg-muted"
       >
         <div
-          className="h-full rounded-full bg-primary transition-all duration-300"
+          className="h-full rounded-full bg-primary transition-all duration-250"
           style={{ width: `${percentage}%` }}
         />
       </div>

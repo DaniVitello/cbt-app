@@ -1,3 +1,4 @@
+import { PenLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
@@ -16,7 +17,7 @@ export function EmptyState({ title, description, action, className }: EmptyState
       )}
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-        <span className="text-2xl">📝</span>
+        <PenLine className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
       </div>
       <div>
         <h3 className="font-medium">{title}</h3>

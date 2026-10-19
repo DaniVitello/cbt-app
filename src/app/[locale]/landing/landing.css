@@ -965,4 +965,14 @@
   min-height: 100vh;
   --font-body: var(--font-sans);
 }
+
+/* Subtítulos de la trust bar: el gris claro del prototipo no pasa 4.5:1
+   sobre crema (2.2:1). En claro se usa un salvia más profundo; en oscuro
+   el gris claro sí pasa sobre el fondo teal-nocturno. */
+.landing .trust-sublabel {
+  color: #5f7370;
+}
+.dark .landing .trust-sublabel {
+  color: var(--grey-light);
+}
   

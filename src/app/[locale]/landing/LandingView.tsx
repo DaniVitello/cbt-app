@@ -519,7 +519,7 @@ export function LandingView() {
               <p>{t("footerTagline")}</p>
             </div>
             <div className="footer-col">
-              <h4>{t("footerProduct")}</h4>
+              <h3>{t("footerProduct")}</h3>
               <ul>
                 {productLinks.map((l) => (
                   <li key={l}>
@@ -529,7 +529,7 @@ export function LandingView() {
               </ul>
             </div>
             <div className="footer-col">
-              <h4>{t("footerResources")}</h4>
+              <h3>{t("footerResources")}</h3>
               <ul>
                 {resourcesLinks.map((l) => (
                   <li key={l}>
@@ -539,7 +539,7 @@ export function LandingView() {
               </ul>
             </div>
             <div className="footer-col">
-              <h4>{t("footerCompany")}</h4>
+              <h3>{t("footerCompany")}</h3>
               <ul>
                 {companyLinks.map((l) => (
                   <li key={l}>

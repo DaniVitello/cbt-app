@@ -111,7 +111,7 @@ export function StepCarousel({ steps, currentStep, onStepClick, className }: Pro
                 className={cn(
                   "flex min-w-0 shrink-0 grow-0 basis-[72%] flex-col items-center px-2 text-center transition-all duration-300",
                   d === 0 && "opacity-100 blur-0",
-                  d === 1 && "opacity-60 blur-[2px]",
+                  d === 1 && "opacity-75 blur-[2px]",
                   d === 2 && "opacity-35 blur-[3px]",
                   d > 2 && "invisible",
                 )}
@@ -119,7 +119,9 @@ export function StepCarousel({ steps, currentStep, onStepClick, className }: Pro
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
                   {index + 1}
                 </span>
-                <span className="mt-1 text-sm text-muted-foreground">{step}</span>
+                <span className={cn("mt-1 text-sm", d === 1 ? "text-foreground" : "invisible")}>
+                  {step}
+                </span>
               </div>
             );
           })}
